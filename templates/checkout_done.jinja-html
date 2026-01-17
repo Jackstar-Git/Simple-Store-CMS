@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Birdie Club GmbH bietet die neueste Technologie im Golf-Equipment für verbesserte Leistung auf dem Platz und beim Training.">
+    <meta name="keywords" content="Golf-Equipment, Birdie Club GmbH, Premium-Golf-Schläger, Golf-Trainingsausrüstung, professionelles Golf-Equipment">
+    <meta name="author" content="Birdie Club GmbH">
+    <meta http-equiv="refresh" content="10;url=/" />
+    <title>Bestellung abgeschlossen - Birdie Club GmbH</title>
+
+    <link rel="stylesheet" href="{{ url_for('internal.plugins', filename='carousel/carousel.css') }}">
+    <link rel="shortcut icon" href="{{ url_for('internal.uploads', filename='Logo.png') }}" type="image">
+    <style>
+        div#container {
+            min-height: 80vh;
+        }
+
+        p {
+            text-align: center;
+            padding-inline: 80px;
+        }
+    </style>
+</head>
+
+<body>
+    {% include "snippets/navbar.jinja-html" %}
+    <div id="container">
+        <h2>Bestellung Aufgegeben</h2>
+
+        <p>Vielen Dank für Ihre Bestellung. Ihre Bestellung ist bei uns angekommen und wird in Kürze bearbeitet.</p>
+        <p>Sie erhalten in  eine E-Mail als Bestätigungm sobalf wir Ihre Bestellung bearbeitet haben.</p><br>
+
+        <p>Sie werden in 10 Sekunden an die Homepage zurückgeleitet!</p>
+    </div>
+    
+    
+    {% include "snippets/footer.jinja-html" %}
+
+    <script src="{{ url_for('static', filename='js/captcha.js')}}"></script>
+</body>
+</html>

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="{{ url_for('internal.uploads', filename='Logo.png') }}" type="image">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/admin/see-logs.css') }}">
+    <title>Admin Panel - Server Logs Übersicht</title>
+</head>
+<body>
+    <div class="main-container">
+        {% include "admin/sidebar.jinja-html" %}
+        <div class="main-content">
+            <h2>Server Logs Übersicht</h2>
+
+            <div class="filter-bar">
+                <input type="hidden" id="csrf_token" name="csrf_token" value="{{ generate_token() }}">
+                <select id="severityFilter" name="severityFilter">
+                    <option value="ALL" selected>Alle</option>
+                    <option value="DEBUG">Debug</option>
+                    <option value="INFO">Info</option>
+                    <option value="WARNING">Warnungen</option>
+                    <option value="ERROR">Fehler</option>
+                    <option value="CRITICAL">Kritische Fehler</option>
+                </select>
+
+                <select id="itemsFilter" name="itemsFilter">
+                    <option value="50" selected>50</option>
+                    <option value="100">100</option>
+                    <option value="500">500</option>
+                    <option value="1000">1000</option>
+                    <option value="10000">10000</option>
+                    <option value="0">Alle (Warnung: kann zu Verzögerungen führen)</option>
+                </select>
+
+                <select id="sortingFilter" name="sortingFilter">
+                    <option value="ASC">Neueste unten</option>
+                    <option value="DESC" selected>Neueste oben</option>
+                </select>
+
+                <button id="applyFilters" onclick="fetchLogs()">Filter anwenden</button>
+            </div>
+
+            <!-- Logs container -->
+            <div class="logs-container">
+                <div id="logsOutput">
+                    {% for line in logs %}
+                        {{line}} <br>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="{{ url_for('static', filename='js/admin/logs.js')}}"></script>
+</body>
+</html>

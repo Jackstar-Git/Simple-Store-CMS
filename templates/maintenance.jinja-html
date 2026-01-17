@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wartungsmodus - Birdie Club GmbH</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/root.css') }}">
+    <link rel="shortcut icon" href="{{ url_for('internal.uploads', filename='Logo.png') }}" type="image">
+</head>
+
+<body>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+        p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+        }
+        a {
+            display: inline-block;
+            padding: 0.8rem 1.5rem;
+            background-color: var(--main-color);
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+        a:hover {
+            background-color: var(--secondary-color);
+        }
+    </style>
+
+    <h1>Wartungsmodus</h1>
+    <p>Diese Seite befindet sich aktuell im Wartungsmodus. Um diese Seite anzeigen zu können, sind Admin-Rechte erforderlich.</p>
+    <p>Wenn Sie Admin-Berechtigungen haben, können Sie sich über den unten stehenden Link anmelden.</p>
+    <a href="/admin/login">Zum Login</a>
+</body>
+</html>

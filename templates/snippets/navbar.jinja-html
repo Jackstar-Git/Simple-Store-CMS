@@ -1,0 +1,34 @@
+<head>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/navbar.css') }}">
+</head>
+<body>
+    <noscript style="text-align: center; font-size: 50px">
+        <h1>Diese Seite benötigt JavaScript um einwandfrei zu funktionieren.</h1>
+    </noscript>
+    <nav class="navbar">
+        <div class="navbar-left">
+            <a href="/"><img src="{{ url_for('internal.uploads', filename='Logo.png')}}" alt="Logo" class="logo"></a>
+            <span class="text">Birdie Club GmbH</span>
+        </div>
+        <div class="navbar-right">
+            <input type="checkbox" name="hamburger-menu" id="hamburger-menu">
+            <label for="hamburger-menu" class="hamburger">&#9776;</label>
+            <div class="nav-items">
+                <a href="/" class="nav-item">Home</a>
+                <a href="/ueber" class="nav-item">Über uns</a>
+                <a href="/produkte" class="nav-item">Produkte</a>
+                <a href="/kontakt" class="nav-item">Kontakt</a>
+                <a href="/cart" class="nav-item cart_icon"><i class="fa-solid fa-cart-shopping"></i>
+                    <span id="cart_indicator">
+                        {% set cart_size=session["cart"] | length %}
+                        {% if  cart_size > 9%}
+                            9+
+                        {% else %}
+                            {{cart_size}}
+                        {% endif %}                   
+                    </span>
+                </a>
+            </div>
+        </div>
+    </nav>
+</body>

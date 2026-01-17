@@ -1,0 +1,70 @@
+<head>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/admin/sidebar.css') }}">
+</head>
+<body>
+    <div class="main-container">
+        <nav class="sidebar" aria-label="Admin Sidebar">
+            <div class="logo">Admin Panel</div>
+            <div class="nav">
+                <div class="nav-item"><a href="/admin"><i class="fas fa-home-alt"></i> Übersicht</a></div>
+                
+                <div class="nav-item">
+                    <a href="#" class="menu-toggle"><i class="fa-solid fa-shop"></i> Produkte</a>
+                    <div class="submenu">
+                        <div class="submenu-item"><a href="/admin/produkte/alle">Alle Produkte</a></div>
+                        <div class="submenu-item"><a href="/admin/produkte/erstellen">Produkt hinzufügen</a></div>
+                        <div class="submenu-item"><a href="/admin/produkte/kategorien">Kategorien</a></div>
+                    </div>
+                </div>
+                
+                <div class="nav-item">
+                    <a href="#" class="menu-toggle"><i class="fa-solid fa-photo-film"></i> Medien</a>
+                    <div class="submenu">
+                        <div class="submenu-item"><a href="/admin/medien/alle">Alle Anzeigen</a></div>
+                    </div>
+                </div>
+                
+                <div class="nav-item">
+                    <a href="#" class="menu-toggle"><i class="fa-solid fa-tags"></i> Coupons</a>
+                    <div class="submenu">
+                        <div class="submenu-item"><a href="/admin/coupons/alle">Alle anzeigen</a></div>
+                        <div class="submenu-item"><a href="/admin/coupons/erstellen">Coupon hinzufügen</a></div>
+                    </div>
+                </div>
+
+                <div class="nav-item">
+                    <a href="#" class="menu-toggle"><i class="fa-solid fa-box"></i>Anfragen</a>
+                    <div class="submenu">
+                        <div class="submenu-item"><a href="/admin/anfragen/bestellungen">Bestellungen</a></div>
+                        <div class="submenu-item"><a href="/admin/anfragen/kontakt">Kontakanfragen</a></div>
+                    </div>
+                </div>
+
+                <div class="nav-item">
+                    <a href="#" class="menu-toggle"><i class="fa-solid fa-palette"></i> Aussehen</a>
+                    <div class="submenu">
+                        <div class="submenu-item"><a href="/admin/aussehen/allgemein">Allgemein</a></div>
+                        <div class="submenu-item"><a href="/admin/aussehen/templates">Templates</a></div>
+                        <div class="submenu-item"><a href="/admin/aussehen/static">CSS & JavaScript</a></div>
+                    </div>
+                </div>
+                
+                <div class="nav-item">
+                    <a href="#" class="menu-toggle"><i class="fas fa-cogs"></i> Einstellungen</a>
+                    <div class="submenu">
+                        <div class="submenu-item"><a href="/admin/einstellungen/allgemein">Allgemein</a></div>
+                        <div class="submenu-item"><a href="/admin/einstellungen/server">Server</a></div>
+                        <div class="submenu-item"><a href="/admin/einstellungen/logs">Logs</a></div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="profile">
+                <a href="/dashboard"><img src="{{ url_for('internal.uploads', filename='Logo.png') }}" alt="Profile Picture"></a>
+                <a href="/admin/logout" class="logout-button">Ausloggen <i class="fa-solid fa-arrow-right-from-bracket"></i></a>
+            </div>
+        </nav>
+    </div>
+    <script src="{{ url_for('static', filename='js/admin/sidebar.js') }}"></script>
+</body>
+</html>

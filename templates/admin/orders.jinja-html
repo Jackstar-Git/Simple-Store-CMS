@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Orders</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/admin/orders.css') }}">
+</head>
+<body>
+    <div class="main-container">
+        {% include "admin/sidebar.jinja-html" %}
+
+        <div class="main-content">
+            <h2>Bestellungen</h2>
+            <div class="product-filters">
+                <div class="filter-menu">
+                    <select id="status-filter" onchange="filterOrders()">
+                        <option value="all">Alle Status</option>
+                        <option value="offen">Offen</option>
+                        <option value="in bearbeitung">In Bearbeitung</option>
+                        <option value="geschlossen">Geschlossen</option>
+                    </select>
+                </div>
+                <div class="sort-options">
+                    <select id="sort-options" onchange="sortOrders()">
+                        <option value="default">Sortieren nach</option>
+                        <option value="date-asc">Datum: Alt zu Neu</option>
+                        <option value="date-desc">Datum: Neu zu Alt</option>
+                        <option value="name-asc">Name: A-Z</option>
+                        <option value="name-desc">Name: Z-A</option>
+                        <option value="price-asc">Preis: Niedrig zu Hoch</option>
+                        <option value="price-desc">Preis: Hoch zu Niedrig</option>
+                    </select>
+                </div>
+            </div>
+            <div class="orders-list">
+                {% for order in orders %}
+                    <div class="order-item" data-status="{{ order.status }}" data-date="{{ order.date }}" data-name="{{ order.name }}" data-price="{{ order.total_price }}">
+                        <div class="order-info">
+                            <h3>{{ order.id }}</h3>
+                            <p>{{ order.get("items")|length }} Artikel</p>
+                            <p>{{ order.date }}</p>
+                        </div>
+                        <div class="order-total">
+                            <p>€ {{ order.total_price }}</p>
+                        </div>
+                        <div class="order-status">
+                            {% if order.status == 'offen' %}
+                                <i class="fas fa-times-circle" style="color: red;"></i>
+                            {% elif order.status == 'in bearbeitung' %}
+                                <i class="fas fa-clock" style="color: darkorange;"></i>
+                            {% else %}
+                                <i class="fas fa-check-circle" style="color: green;"></i>
+                            {% endif %}
+                        </div>
+                        <div class="order-actions">
+                            <a href="{{ url_for('admin.view_order', id=order.id) }}" class="btn view-btn"><i class="fas fa-eye"></i></a>
+                            <a href="/api/delete-order?id={{ order.id }}" class="btn delete-btn" onclick="return confirm('Bist du sicher, dass du diese Bestellung löschen möchtest?')"><i class="fas fa-trash-alt"></i></a>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    <script src="{{ url_for('static', filename='js/admin/orders.js') }}"></script>
+</body>
+</html>

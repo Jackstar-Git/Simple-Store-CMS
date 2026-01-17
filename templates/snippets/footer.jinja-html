@@ -1,0 +1,54 @@
+<head>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/footer.css') }}">
+</head>
+<body>
+<footer class="footer_section">
+    <div class="links_container">
+        <div class="quick_links">
+            <h3>Quick Links</h3>
+            <nav class="info_links_menu" aria-label="Quick Links">
+                <a href="/">Home</a>
+                <a href="/ueber">Über Uns</a>
+                <a href="/produkte">Produkte</a>
+                <a href="/#contact_section">Kontakt</a>
+                <a href="/sitemap.xml">Sitemap</a>
+            </nav>
+        </div>
+        <div class="important_links">
+            <h3>Wichtige Links</h3>
+            <nav class="info_links_menu" aria-label="Wichtige Links">
+                <a href="/rechtliches/impressum">Impressum</a>
+                <a href="/rechtliches/agb">AGB</a>
+                <a href="/rechtliches/datenschutz">Datenschutz</a>
+            </nav>
+        </div>
+        <div class="contact_nav">
+            <h3>Socials</h3> 
+            <a href="https://www.instagram.com/birdieclub.golf/" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+                <i class="fab fa-instagram"></i>
+                <span>Instagram: @birdieclub.golf</span>
+            </a>
+            <a href="mailto:birdie2943@uebungsfirmen.at" target="_blank" rel="noopener noreferrer" aria-label="Email">
+                <i class="fa fa-envelope" aria-hidden="true"></i>
+                <span>Email: birdie2943@uebungsfirmen.at</span>
+            </a>
+            <a target="_blank" rel="noopener noreferrer" href="https://www.google.at/maps/place/Polgarstra%C3%9Fe+24,+1220+Wien/@48.2331767,16.4500455,17z/data=!3m1!4b1!4m6!3m5!1s0x476d013341a664d9:0x5b0804c028354292!8m2!3d48.2331767!4d16.4526204!16s%2Fg%2F11c5bgs8dj?entry=ttu&g_ep=EgoyMDI0MTAyOS4wIKXMDSoASAFQAw%3D%3D" aria-label="Location">
+                <i class="fas fa-map-marker-alt"></i>
+                <span>Polgarstraße 24, 1220 Wien, Österreich</span>
+            </a>
+        </div>
+    </div> 
+    <p>
+    © <span id="displayYear"></span> - Alle Rechte vorbehalten von: Birdie Club GmbH
+    </p>
+</footer>
+<div class="privacy-notice" id="privacy-notice" style="display: none;">
+    <p>
+        Diese Website verwendet Cookies, um Ihnen die bestmögliche Erfahrung zu bieten. 
+        Durch die Nutzung unserer Website stimmen Sie der Verwendung von Cookies zu. 
+        <a href="/privacy-policy" target="_blank" rel="noopener noreferrer">Weitere Informationen</a>
+    </p>
+    <button id="acceptCookies" class="accept-btn" aria-label="Cookies akzeptieren">Akzeptieren</button>
+</div>
+<script src="{{ url_for('static', filename='js/footer.js') }}"></script>
+</body>

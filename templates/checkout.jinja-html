@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Birdie Club GmbH bietet die neueste Technologie im Golf-Equipment für verbesserte Leistung auf dem Platz und beim Training.">
+    <meta name="keywords" content="Golf-Equipment, Birdie Club GmbH, Premium-Golf-Schläger, Golf-Trainingsausrüstung, professionelles Golf-Equipment">
+    <meta name="author" content="Birdie Club GmbH">
+    <title>Kassa - Birdie Club GmbH</title>
+
+    <link rel="stylesheet" href="{{ url_for('internal.plugins', filename='carousel/carousel.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/checkout.css') }}">
+    <link rel="shortcut icon" href="{{ url_for('internal.uploads', filename='Logo.png') }}" type="image">
+</head>
+
+<body>
+    {% include "snippets/navbar.jinja-html" %}
+
+    <section class="checkout">    
+    <h2>Kassa</h2>
+        <form method="POST" action="/checkout" class="checkout-form">
+            <input type="hidden" id="csrf_token" name="csrf_token" value="{{ generate_token() }}">
+            <div class="form-group">
+                <select id="type" name="type" required>
+                    <option disabled selected value> -- bitte wählen -- </option>
+                    <option value="Herr">Herr</option>
+                    <option value="Frau">Frau</option>
+                    <option value="Firma">Firma</option>
+                    <option value="Divers">Divers</option>
+                </select>
+                <label for="type">Anrede</label>
+            </div>
+            <div class="form-group">
+                <input type="text" id="name" name="name" placeholder="Max Mustermann / Musterfirma GmbH" required>
+                <label for="name">Vollständiger Name</label>
+            </div>
+
+            <div class="form-group">
+                <input type="email" id="email" name="email" placeholder="max.mustermann@example.com" required>
+                <label for="email">E-Mail</label>
+            </div>
+
+            <div class="form-group">
+                <input type="tel" id="tel" name="tel" placeholder="+43 123 456 789">
+                <label for="tel">Telefonnummer</label>
+            </div>
+
+            <div class="form-group">
+                <input type="text" id="address" name="address" placeholder="Musterstraße" required>
+                <label for="address">Adresse</label>
+            </div>
+
+            <div class="form-group">
+                <input type="text" id="country" name="country" placeholder="Musterland" required>
+                <label for="country">Land</label>
+            </div>
+
+
+            <div class="form-group">
+                <input type="text" id="city" name="city" placeholder="Musterstadt" required>
+                <label for="city">Stadt</label>
+            </div>
+
+            <div class="form-group">
+                <input type="text" id="zip_code" name="zip_code" placeholder="1234" required>
+                <label for="zip_code">Postleitzahl</label>
+            </div>
+
+            <div class="form-group">
+                <label for="captcha-img"  id="captcha-container">
+                    <a onclick="loadCaptcha()" id="reload-captcha-btn">
+                        <i class="fa-solid fa-rotate"></i> CAPTCHA generieren/neu laden
+                    </a>
+                    <br>
+                    <img id="captcha-img" src="" alt="Zum generieren bitte den Knopf oberhalb drücken">
+                    {% if  session.get("error") %}
+                            <span style="color: red; font-weight: 900;">{{session.get("error")}} <br></span>
+                    {% endif %}
+                </label>
+            </div>
+            
+            <div class="form-group">
+                <input type="text" id="captcha-text" name="captcha-text" required>
+                <label for="captcha-text">CAPTCHA-Text:</label>
+            </div>
+            
+            <div class="checkbox-group">
+                <input type="checkbox" name="agb" id="agb" required>
+                <label for="agb">Ich habe die <a href="/rechtliches/agb">AGB</a> gelesen und akzeptiere diese.</label>
+            </div>
+
+            <!-- Submit Button -->
+            <button type="submit" class="checkout-btn">Bestellung abschließen</button>
+        </form>
+    </section>
+
+    {% include "snippets/footer.jinja-html" %}
+
+    <script src="{{ url_for('static', filename='js/captcha.js')}}"></script>
+</body>
+</html>

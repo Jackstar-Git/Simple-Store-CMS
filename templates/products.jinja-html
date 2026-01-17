@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Produkte - Birdie Club GmbH</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/products.css') }}">
+    <link rel="shortcut icon" href="{{ url_for('internal.uploads', filename='Logo.png') }}" type="image">
+
+</head>
+
+<body>
+    {% include "snippets/navbar.jinja-html" %}
+    <section class="products">
+        <h2>Unsere Produkte</h2>
+        
+        <div class="product-filters">
+            <form class="search-bar" onsubmit="searchProducts(); return false;">
+                <input type="text" id="search-input" placeholder="Suche nach Produkten...">
+            </form>
+            <div class="sort-options">
+                <select id="sort-options" onchange="sortProducts()">
+                    <option value="default">Sortieren nach</option>
+                    <option value="price-asc">Preis: Niedrig zu Hoch</option>
+                    <option value="price-desc">Preis: Hoch zu Niedrig</option>
+                    <option value="name-asc">Name: A-Z</option>
+                    <option value="name-desc">Name: Z-A</option>
+                </select>
+            </div>
+
+            <div class="filter-menu">
+                <select id="category-filter" onchange="filterProducts()">
+                    <option value="all">Alle Kategorien</option>
+                    {% for category in get_settings("categories") %}
+                        <option  {% if query_params.get('category') ==  category  %}selected{% endif %} value="{{ category }}">{{ category }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+        
+        <!-- Products Container -->
+        <div class="products-container" id="products-container">
+            <input type="hidden" id="csrf_token" name="csrf_token" value="{{ generate_token() }}">
+            {% set products = query_products(query_params.get("search"), query_params.get("category")) %}
+            {% if products|length == 0 %}
+                <h3>Keine passenden Produkte gefunden!</h3>
+                <br>
+                <a href="/produkte">Zurück zur Produktübersicht</a>
+            {% endif %}
+
+            {% for product in products %}
+            <div class="product" data-name="{{ product.name }}" data-price="{% if not product.new_price %} {{ product.price }} {% else %} {{ product.new_price }} {% endif %}">
+                <img src="{{url_for('internal.uploads', filename=product.thumbnail)}}" loading="lazy" alt="{{ product.name }}">
+                <a  href="/produkt/{{ product.id }}"><h3>{{ product.name }}</h3></a>
+                <div class="detail-box">
+                    <div class="price_heading">
+                        <span class="old-price">€{{ product.price|custom_format }}</span>
+                        {% if product.new_price %}
+                        <span class="new-price">€{{ product.new_price|custom_format }}</span>
+                        {% endif %}
+                    </div>
+                    <button onclick="addToCart({{product.id}})"><span><i class="fa-solid fa-cart-plus"></i></span></button>
+                </div>
+                <span class="tax-note">inkl. {{ product.tax }}% USt.</span>
+            </div>
+            {% endfor %}
+        </div>
+    </section>
+
+    {% include "snippets/footer.jinja-html" %}
+    <script src="{{ url_for('static', filename='js/products.js') }}"></script>
+</body>
+</html>

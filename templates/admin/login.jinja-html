@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel - Login</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/admin/login.css') }}">
+    <link rel="shortcut icon" href="{{ url_for('internal.uploads', filename='Logo.png') }}" type="image">
+</head>
+
+<body>
+    {% include "snippets/navbar.jinja-html" %}
+    <div class="login-container">
+        <h2>Login</h2>
+        <form action="/admin/login" method="POST">
+            <input type="hidden" id="csrf_token" name="csrf_token" value="{{ generate_token() }}">
+            <div class="input-container">
+                <label for="password">Passwort</label>
+                <input type="password" id="password" name="password" required>
+                {%if error%}
+                    <p style="color: red; font-weight:900; margin-bottom: 15px">{{ error }}</p>
+                {%endif%}
+                <div class="remember-container">
+                    <label for="remember">Anmeldung speichern</label>
+                    <input type="checkbox" name="remember" id="remember">
+                </div>
+            </div>
+            <button type="submit" class="login-btn">Login</button>
+        </form>
+    </div>
+    {% include "snippets/footer.jinja-html" %}
+</body>
+</html>

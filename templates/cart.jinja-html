@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Warenkorb - Birdie Club GmbH</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/cart.css') }}">
+    <link rel="shortcut icon" href="{{ url_for('internal.uploads', filename='Logo.png') }}" type="image">
+</head>
+
+<body>
+    {% include "snippets/navbar.jinja-html" %}
+    <main>
+        <section aria-labelledby="cart-heading">
+            <h2 id="cart-heading">Warenkorb</h2>
+            <div class="product_list">
+                {% set cart = session.get("cart", {}) %}
+                {% set cart_sums = session.get("cart_sums", {}) %}
+                {% if not cart %}
+                    <h3 style="text-align: center; font-size: 32px;">Der Warenkorb ist leer.</h3>
+                {% endif %}
+                {% set products = query_products() %}
+                {% for product_id, quantity in cart.items() %}
+                    {% set product = products | selectattr("id", "equalto", product_id) | first %}
+                    {% if product %}
+                        <div class="product" data-product-id="{{ product.id }}">
+                            <img src="{{ url_for('internal.uploads', filename=product.thumbnail) }}" alt="{{ product.name }}" class="product_thumbnail" width="120" height="120">
+                            <div class="text_section">
+                                <h3 class="product_title"><a href="/produkt/{{product.id}}">{{ product.name }}</a></h3>
+                                <span class="price">€ {{ product.price|custom_format }}</span>
+                                {% if product.new_price %}
+                                    <span class="new-price">€ {{ product.new_price|custom_format }}</span>
+                                {% endif %}
+                            </div>
+                            <div class="amount_section">
+                                <button class="add_btn" onclick="updateCartWithDOM('{{ product.id }}', 1)" aria-label="Increase quantity">
+                                    <i class="fa-solid fa-plus"></i>
+                                </button>
+                                <input type="number" disabled class="quantity_input" value="{{ quantity }}" min="1" max="{{ product.amount }}" aria-label="Quantity">
+                                <button class="subtract_btn" onclick="updateCartWithDOM('{{ product.id }}', -1)" aria-label="Decrease quantity">
+                                    <i class="fa-solid fa-minus"></i>
+                                </button>
+                                <button class="delete_btn" onclick="updateCartWithDOM('{{ product.id }}', 0)" aria-label="Remove item">
+                                    <i class="fa-solid fa-trash"></i>
+                                </button>
+                            </div>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+            <input type="hidden" id="csrf_token" name="csrf_token" value="{{ generate_token() }}">
+        </section>
+        <section class="summary_section" aria-labelledby="summary-heading">
+            <h3 id="summary-heading">Bestellübersicht</h3>
+
+            <div class="discount_section">
+                <div class="input-row">
+                    <input type="text" id="discount-code" placeholder="Rabattcode eingeben" class="discount-input" aria-label="Discount code">
+                    <button id="apply-discount" onclick="checkDiscount()" class="apply-btn" aria-label="Apply discount">Anwenden</button>
+                </div>
+                <span id="coupon-error" role="alert"></span>
+                {% set discount = session.get("discount", {}) %}
+                <div id="discount-info" class="discount-info">
+                    {% if discount %}
+                        {% if discount.type == "absolute" %}
+                            {% set type = "€" %}
+                        {% else %}
+                            {% set type = "%" %}
+                        {% endif %}
+                        <button onclick="removeCoupon()" id="remove-discount" class="remove-discount-btn" aria-label="Remove discount"><i class="fa-solid fa-trash"></i></button>
+                        <p><strong>{{ discount.id }}</strong> <span>{{ "%.2f" | format(discount.value) }} {{type}}</span></p>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="summary_item">
+                <span>Zwischensumme:</span>
+                <span id="subtotal">€ {{ cart_sums.get("old_total", 0.0)|round(2)|custom_format }}</span>
+            </div>
+            <div class="summary_item">
+                <span>Rabatt:</span>
+                <span id="total_discount">€ {{ cart_sums.get("total_discount", 0.0)|round(2)|custom_format }}</span>
+            </div>
+            <div class="summary_item">
+                <span>Endbetrag:</span>
+                <span id="discounted_subtotal">€ {{ cart_sums.get("total", 0.0)|round(2)|custom_format }}</span>
+            </div>
+            <div class="summary_item">
+                <span>Steuerbetrag:</span>
+                <span id="cart-tax">€ {{ cart_sums.get("tax", 0.0)|round(2)|custom_format }}</span>
+            </div>
+            <div class="summary_item total">
+                <span>Gesamtsumme:</span>
+                <span id="total_amount">€ {{ cart_sums.get("total", 0.0)|round(2)|custom_format }}</span>
+            </div>
+            {% if cart %}
+                <a href="/checkout" class="checkout_btn" aria-label="Proceed to checkout">Zur Kasse</a>
+            {% endif %}
+        </section>
+    </main>
+
+    {% include "snippets/footer.jinja-html" %}
+    <script src="{{ url_for('static', filename='js/cart.js')}}"></script>
+</body>
+</html>

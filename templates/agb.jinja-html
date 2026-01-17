@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AGB - Birdie Club GmbH</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/legal.css')}}">
+    <link rel="shortcut icon" href="{{ url_for('internal.uploads', filename='Logo.png') }}" type="image">
+    
+</head>
+
+<body>
+    <style>
+    </style>
+    {% include "snippets/navbar.jinja-html" %}
+        <section>
+            <h1>Birdie Club Nutzungsbedingungen</h1>
+
+            <h2>1. Elektronische Kommunikation</h2>
+            <p>
+                Wenn Sie mit der Birdie Club GmbH kommunizieren, indem Sie E-Mails, Textnachrichten oder andere Mitteilungen von Ihrem Computer oder mobilen Gerät an uns senden, kommunizieren Sie mit uns elektronisch. Wir werden mit Ihnen auf verschiedene Art und Weise elektronisch kommunizieren, z. B. über E-Mail, Textnachrichten, In-App Push Nachrichten oder auch durch die Veröffentlichung elektronischer Nachrichten oder sonstiger Kommunikation auf unserer Webseite oder im Rahmen anderer Services, wie etwa dem Message Center. Für vertragliche Zwecke stimmen Sie zu, dass alle Zustimmungen, Benachrichtigungen, Veröffentlichungen und andere Kommunikation, die wir Ihnen elektronisch mitteilen insofern keine Schriftform erfordern, es sei denn zwingend anzuwendende gesetzliche Vorschriften erfordern eine andere Form der Kommunikation.
+            </p>
+
+            <h2>2. Urheberrecht und Datenbankrechte</h2>
+            <p>
+                Der gesamte Inhalt der in einem Birdie Club Service enthalten oder durch ihn bereitgestellt wird, wie Text, Grafik, Logos, Button-Icons, Bilder, Audio-Clips, digitale Downloads und Datensammlungen, ist Eigentum von Birdie Club oder von Dritten, die Inhalte zuliefern oder auf der Webseite bereitstellen, und ist durch österreichisches und internationales Urheberrecht und Datenbankrecht geschützt.
+            </p>
+            <p>
+                Sie dürfen ohne unsere ausdrückliche schriftliche Zustimmung nicht Teile eines Birdie Club Services systematisch extrahieren und/oder wiederverwenden. Insbesondere dürfen Sie ohne die ausdrückliche schriftliche Zustimmung von Birdie Club GmbH kein Data Mining, keine Robots oder ähnliche Datensammel- und Extraktionsprogramme einsetzen.
+            </p>
+
+            <h2>3. Lizenz und Zugang</h2>
+            <p>
+                Unter der Voraussetzung der Einhaltung dieser Nutzungsbedingungen und etwaiger anwendbarer Servicebedingungen sowie der Bezahlung anfallender Gebühren gewähren Ihnen Birdie Club von Inhalten eine beschränkte, einfache, nicht übertragbare und nicht unterlizenzierbare Lizenz für den Zugriff und die nicht-kommerzielle Nutzung der Birdie Club Services.
+            </p>
+            <p>
+                Birdie Club und seine Lizenzgeber, Lieferanten, Herausgeber, Rechteinhaber oder andere Anbieter von Inhalten behalten sich alle Rechte vor, die Ihnen nicht ausdrücklich in diesen Nutzungsbedingungen oder in den Servicebedingungen gewährt werden.
+            </p>
+
+            <h2>4. Rezensionen, Kommentare, Kommunikation und andere Inhalte</h2>
+            <p>
+                Besucher dürfen Rezensionen, Kommentare und andere Inhalte verfassen, E-Cards und andere Kommunikation senden und Vorschläge, Ideen, Kommentare, Fragen oder andere Informationen einsenden, so lange die Inhalte nicht illegal, obszön, beleidigend, bedrohend, diffamierend oder rechtsverletzend sind.
+            </p>
+
+            <h2>5. Unsere Haftung</h2>
+            <p>
+                Wir bemühen uns stets sicherzustellen, dass die Birdie Club Services ohne Unterbrechungen verfügbar sind und Übermittlungen fehlerfrei sind. Durch die Beschaffenheit des Internets kann dies jedoch nicht garantiert werden.
+            </p>
+            <p>
+                Birdie Club haftet unbeschränkt, soweit die Schadensursache auf einer vorsätzlichen oder grob fahrlässigen Pflichtverletzung von Birdie Club oder eines gesetzlichen Vertreters oder Erfüllungsgehilfen von Birdie Club beruht.
+            </p>
+
+            <h2>6. Änderungen von Services oder Änderungen der Nutzungsbedingungen</h2>
+            <p>
+                Sie unterliegen den Allgemeinen Geschäftsbedingungen, Vertragsbedingungen und Nutzungsbedingungen, die zu dem Zeitpunkt in Kraft sind, an dem Sie die Birdie Club Services nutzen.
+            </p>
+
+            <h2>7. Kein Verzicht</h2>
+            <p>
+                Wenn Sie diese Nutzungsbedingungen verletzen und wir unternehmen hiergegen nichts, sind wir weiterhin berechtigt, von unseren Rechten bei jeder anderen Gelegenheit, in der Sie diese Nutzungsbedingungen verletzen, Gebrauch zu machen.
+            </p>
+        </section>
+    {% include "snippets/footer.jinja-html" %}
+</body>
+</html>

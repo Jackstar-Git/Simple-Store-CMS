@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel - Medienbibliothek</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <link href="{{ url_for('static', filename='css/admin/media-library.css') }}" rel="stylesheet">
+    <link rel="shortcut icon" href="{{ url_for('internal.uploads', filename='Logo.png') }}" type="image">
+</head>
+<body>
+    <div class="main-container">
+        {% include "admin/sidebar.jinja-html" %}
+        <!-- Main Content -->
+        <div class="main-content">
+            <input type="hidden" id="csrf_token" name="csrf_token" value="{{ generate_token() }}">
+            <!-- Toolbar (Sticky) -->
+            <div>
+                <div class="toolbar">
+                    <!-- Added Address Bar -->
+                    <input type="text" class="address-bar" id="address-bar" placeholder="Pfad eingeben" value="{{ path }}">
+                    <button class="toolbar-btn" id="back-btn" onclick="folderUp()">
+                        <i class="fa fa-arrow-left" aria-hidden="true"></i>
+                    </button>
+                    <button class="toolbar-btn" onclick="navigateToPath()">Los</button>
+                    <!-- Added Select All Button -->
+                    <button class="toolbar-btn" onclick="selectAllItems()">Alle Auswählen</button>
+                    <div class="toolbar-separator"></div>
+                    <label for="sort-options" class="toolbar-label">Sortieren nach:</label>
+                    <select id="sort-options" class="toolbar-btn">
+                        <option value="name-asc">Name (A-Z)</option>
+                        <option value="name-desc">Name (Z-A)</option>
+                        <option value="size-asc">Größe (Aufsteigend)</option>
+                        <option value="size-desc">Größe (Absteigend)</option>
+                        <option value="date-asc">Datum (Aufsteigend)</option>
+                        <option value="date-desc">Datum (Absteigend)</option>
+                    </select>
+                </div>
+                <div class="toolbar">
+                    <button class="toolbar-btn" id="new-file-btn" onclick="createLocation()">
+                        <i class="fa-solid fa-plus"></i> Ordner erstellen 
+                    </button>
+                    <button class="toolbar-btn" id="new-file-btn" onclick="uploadFile()">
+                        <i class="fa-solid fa-cloud-arrow-up"></i> Datei(en) hochladen 
+                    </button>
+                    <button class="toolbar-btn" id="cut-btn">
+                        <i class="fa-solid fa-cut"></i> Ausschneiden
+                    </button>
+                    <button class="toolbar-btn" id="copy-btn" onclick="copyPath()">
+                        <i class="fa-solid fa-copy"></i> Kopieren
+                    </button>
+                    <button class="toolbar-btn" id="paste-btn" onclick="pastePath()">
+                        <i class="fa-solid fa-paste"></i> Einfügen
+                    </button>
+                    <button class="toolbar-btn" id="delete-btn" onclick="deleteFiles()">
+                        <i class="fa-solid fa-trash"></i> Löschen
+                    </button>
+                    <button class="toolbar-btn" id="edit-btn" onclick="renamePath()">
+                        <i class="fa-solid fa-edit"></i> Bearbeiten
+                    </button>
+                </div>
+            </div>
+            <!-- Adjusted File Explorer Header for Proper Layout -->
+            <div class="file-explorer-header">
+                <span class="checkbox-column">Ausw.</span>
+                <span>Name</span>
+                <span>Zuletzt bearbeitet</span>
+                <span>Art</span>
+                <span>Größe</span>
+            </div>
+            <div class="file-explorer-list" id="file-list">
+                <!-- Files will be dynamically generated here -->
+            </div>
+        </div>
+    </div>
+    <script src="{{ url_for('static', filename='js/admin/media-library.js') }}"></script>
+</body>
+</html>

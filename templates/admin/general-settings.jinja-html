@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="{{ url_for('internal.uploads', filename='Logo.png') }}" type="image">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/admin/settings.css') }}">
+    <title>Admin Panel - Allgemeine Einstellungen</title>
+</head>
+<body>
+    <div class="main-container">
+        {% include "admin/sidebar.jinja-html" %}
+        
+        <div class="main-content">
+            <h2>Allgemeine Einstellungen</h2>
+            
+            <!-- Einstellungsformular -->
+            <form class="settings-form" method="POST" enctype="multipart/form-data">
+                <input type="hidden" id="csrf_token" name="csrf_token" value="{{ generate_token() }}">
+                <!-- Admin-Passwort -->
+                <div class="form-group">
+                    <label for="admin_password">Admin-Passwort:<span class="tooltip-icon" title="Ändern des Passworts für den Admin-Zugang. Warnung: Bei vergessen ist der Zugang zum Dashboard für immer gesperrt.">i</span></label>
+                    <div class="password-wrapper">
+                        <input type="password" id="admin_password" name="admin_password" value="{{ settings['admin-password'] }}" required>
+                        <i class="fas fa-eye password-toggle"></i>
+                    </div>
+                    <ul id="password-requirements" class="password-requirements">
+                        <li id="length" class="invalid"><i class="fas fa-times text-danger"></i> Mindestens 10 Zeichen</li>
+                        <li id="lowercase" class="invalid"><i class="fas fa-times text-danger"></i> Mindestens ein Kleinbuchstabe</li>
+                        <li id="uppercase" class="invalid"><i class="fas fa-times text-danger"></i> Mindestens ein Großbuchstabe</li>
+                        <li id="number" class="invalid"><i class="fas fa-times text-danger"></i> Mindestens eine Zahl</li>
+                        <li id="symbol" class="invalid"><i class="fas fa-times text-danger"></i> Mindestens ein Symbol</li>
+                    </ul>
+                </div>
+
+                <!-- Website URL -->
+                <div class="form-group">
+                    <label for="url">Website URL:<span class="tooltip-icon" title="Angeben der URL der Website.">i</span></label>
+                    <input type="text" id="url" name="url" value="{{ settings.get('url', '') }}" required>
+                </div>
+
+                <!-- Zahlenformat -->
+                <div class="form-group">
+                    <label for="zahlenformat">Zahlenformat:<span class="tooltip-icon" title="Definieren des Zahlenformats für die Website. Wie in MC-Excel: # heißt optionale Ziffer, 0 ist fixe Ziffer.">i</span></label>
+                    <input type="text" id="zahlenformat" name="zahlenformat" value="{{ settings.get('format', '') }}" required>
+                </div>
+
+                <!-- Einstellungen importieren und exportieren -->
+                <div class="form-group file-actions">
+                    <div class="file-action">
+                        <label for="settings_import">Einstellungen importieren:<span class="tooltip-icon" title="Importieren von Einstellungen aus einer Datei.">i</span></label>
+                        <input type="file" id="settings_import" name="settings_import" class="file-input">
+                    </div>
+                    <div class="file-action">
+                        <label for="settings_export">Einstellungen exportieren:<span class="tooltip-icon" title="Exportieren der aktuellen Einstellungen in eine Datei.">i</span></label>
+                        <a href="/download/data/settings.json" class="export-btn">
+                            <i class="fa-solid fa-download"></i> Exportieren
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Produktdatei importieren und exportieren -->
+                <div class="form-group file-actions">
+                    <div class="file-action">
+                        <label for="product_import">Produktdatei importieren:<span class="tooltip-icon" title="Importieren von Produktdaten aus einer Datei.">i</span></label>
+                        <input type="file" id="product_import" name="product_import" class="file-input">
+                        <span id="product-import-name" class="file-name"></span>
+                    </div>
+                    <div class="file-action">
+                        <label for="product_export">Produktdatei exportieren:<span class="tooltip-icon" title="Exportieren der aktuellen Produktdaten in eine Datei.">i</span></label>
+                        <a href="/download/data/products.json" class="export-btn">
+                            <i class="fa-solid fa-download"></i> Exportieren
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Coupondatei importieren und exportieren -->
+                <div class="form-group file-actions">
+                    <div class="file-action">
+                        <label for="coupon_import">Coupondatei importieren:<span class="tooltip-icon" title="Importieren von Coupon-Daten aus einer Datei.">i</span></label>
+                        <input type="file" id="coupon_import" name="coupon_import" class="file-input">
+                    </div>
+                    <div class="file-action">
+                        <label for="coupon_export">Coupondatei exportieren:<span class="tooltip-icon" title="Exportieren der aktuellen Coupon-Daten in eine Datei.">i</span></label>
+                        <a href="/download/data/coupons.json" class="export-btn">
+                            <i class="fa-solid fa-download"></i> Exportieren
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Eventdatei importieren und exportieren -->
+                <div class="form-group file-actions">
+                    <div class="file-action">
+                        <label for="event_import">Eventdatei importieren:<span class="tooltip-icon" title="Importieren von Event-Daten aus einer Datei.">i</span></label>
+                        <input type="file" id="event_import" name="event_import" class="file-input">
+                    </div>
+                    <div class="file-action">
+                        <label for="event_export">Eventdatei exportieren:<span class="tooltip-icon" title="Exportieren der aktuellen Event-Daten in eine Datei.">i</span></label>
+                        <a href="/download/data/events.json" class="export-btn">
+                            <i class="fa-solid fa-download"></i> Exportieren
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Eventdatei importieren und exportieren -->
+                <div class="form-group file-actions">
+                    <div class="file-action">
+                        <label for="contacts_import">Kontaktanfragen importieren:<span class="tooltip-icon" title="Importieren von Kontakanfrage-Daten aus einer Datei.">i</span></label>
+                        <input type="file" id="contacts_import" name="contacts_import" class="file-input">
+                    </div>
+                    <div class="file-action">
+                        <label for="contacts_export">Kontaktanfragen exportieren:<span class="tooltip-icon" title="Exportieren der aktuellen Kontaktanfrage-Daten in eine Datei.">i</span></label>
+                        <a href="/download/data/contacts.json" class="export-btn">
+                            <i class="fa-solid fa-download"></i> Exportieren
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Einstellungen speichern Button -->
+                <div class="form-group">
+                    <button type="submit" class="btn" id="submit-btn" disabled><i class="fa-solid fa-floppy-disk"></i> Einstellungen speichern</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/admin/settings.js') }}"></script>
+</body>
+</html>
