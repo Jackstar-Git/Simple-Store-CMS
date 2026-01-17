@@ -1,0 +1,2335 @@
+diff --git a/data/coupons.json b/data/coupons.json
+index aa7f180..1610ea1 100644
+--- a/data/coupons.json
++++ b/data/coupons.json
+@@ -1,30 +1,3 @@
+ [
+-    {
+-        "id": "Wasilian",
+-        "type": "percentage",
+-        "value": 100.0,
+-        "uses_remaining": null,
+-        "valid_till": null
+-    },
+-    {
+-        "id": "789A-BCDE-FGHI-JKLM",
+-        "type": "percentage",
+-        "value": 20,
+-        "uses_remaining": 1,
+-        "valid_till": "2023-12-09"
+-    },
+-    {
+-        "id": "NOPQ-RSTU-VWXY-Z123",
+-        "type": "absolute",
+-        "value": 5.0,
+-        "uses_remaining": 1,
+-        "valid_till": null
+-    },
+-    {
+-        "id": "4S6Y-JPGJ-HWJQ-LRO7",
+-        "type": "percentage",
+-        "value": 20.0,
+-        "uses_remaining": null,
+-        "valid_till": null
+-    }
++    
+ ]
+\ No newline at end of file
+diff --git a/data/events.json b/data/events.json
+index d12ef97..0637a08 100644
+--- a/data/events.json
++++ b/data/events.json
+@@ -1,10 +1 @@
+-[
+-    {
+-        "id": "1",
+-        "year": 2025,
+-        "month": 1,
+-        "day": 22,
+-        "name": "Test",
+-        "description": "Test"
+-    }
+-]
+\ No newline at end of file
++[]
+\ No newline at end of file
+diff --git a/data/orders.json b/data/orders.json
+index a39e6cc..1610ea1 100644
+--- a/data/orders.json
++++ b/data/orders.json
+@@ -1,29 +1,3 @@
+ [
+-    {
+-        "id": "1700000001",
+-        "email": "customer1@example.com",
+-        "name": "Customer 1",
+-        "product": "Product 1",
+-        "date": "10.10.2023",
+-        "status": "offen",
+-        "notiz": ""
+-    },
+-    {
+-        "id": "1700000002",
+-        "email": "customer2@example.com",
+-        "name": "Customer 2",
+-        "product": "Product 2",
+-        "date": "10.10.2023",
+-        "status": "in bearbeitung",
+-        "notiz": ""
+-    },
+-    {
+-        "id": "1700000003",
+-        "email": "customer3@example.com",
+-        "name": "Customer 3",
+-        "product": "Product 3",
+-        "date": "10.10.2023",
+-        "status": "geschlossen",
+-        "notiz": ""
+-    }
++    
+ ]
+\ No newline at end of file
+diff --git a/data/products.json b/data/products.json
+index 91781bf..50e4682 100644
+--- a/data/products.json
++++ b/data/products.json
+@@ -148,44 +148,5 @@
+         "tax": 20.0,
+         "availability": "Auf Lager",
+         "keyword": "Golfsimulator"
+-    },
+-    {
+-        "id": "-1",
+-        "name": "Test",
+-        "price": 0.5,
+-        "thumbnail": "products/-1/Screenshot 2024-12-26 225747.png",
+-        "amount": 10,
+-        "images": [],
+-        "featured": true,
+-        "new_price": 0.0,
+-        "raw_description": "Test",
+-        "description": "<p>Test</p>",
+-        "categories": [
+-            "Simulator"
+-        ],
+-        "tax": 10.0,
+-        "availability": "Auf Lager",
+-        "keyword": "Tes"
+-    },
+-    {
+-        "id": "-99999999999999",
+-        "name": "Kein Bock mehr",
+-        "price": -10.0,
+-        "thumbnail": "products/-99999999999999/c64aa1f1-bbf7-4b77-9fbc-9c528e9a3330.png",
+-        "amount": 10,
+-        "images": [],
+-        "featured": true,
+-        "new_price": 0.0,
+-        "raw_description": "Ich habe keinen Bock mehr auf diese Scheiße. Ich glaube ich gehe insane!!!!!!!",
+-        "description": "<p>Ich habe keinen Bock mehr auf diese Scheiße. Ich glaube ich gehe insane!!!!!!!</p>",
+-        "categories": [
+-            "Golfschläger",
+-            "Golfbälle",
+-            "Golftaschen",
+-            "Simulator"
+-        ],
+-        "tax": 0.0,
+-        "availability": "Auf Lager",
+-        "keyword": "Alles"
+     }
+ ]
+\ No newline at end of file
+diff --git a/main.py b/main.py
+index b17e26b..332966d 100644
+--- a/main.py
++++ b/main.py
+@@ -112,7 +112,7 @@ if __name__ == '__main__':
+     os.chdir(os.path.dirname(__file__))
+     logger.info("*" * 50)
+     logger.info("Application Server started!")
+-    serve(app, port=8080, threads=64, url_scheme="https")
+-    #app.run(host="localhost", port=8080, debug=True)
++    #serve(app, port=8080, threads=64, url_scheme="https")
++    app.run(host="localhost", port=8080, debug=True)
+ 
+ 
+diff --git a/routes/admin.py b/routes/admin.py
+index d3a7eac..e4ad125 100644
+--- a/routes/admin.py
++++ b/routes/admin.py
+@@ -472,7 +472,6 @@ def change_static_files_edit(file):
+         logger.info("Static file saved successfully")
+         return redirect(url_for("admin.template_appearance_edit", template=file))
+     
+-    print(file_path)
+     with open(file_path, "r", encoding="utf-8") as file:
+         file_content = str(file.read())
+     
+@@ -571,12 +570,8 @@ def server_settings():
+     with open("robots.txt", "w") as file:
+         file.write(request.form.get("robots_txt", "").replace("\r", ""))
+ 
+-    print(settings)
+-
+     settings["server_config"].update(config_data)    
+ 
+-    print(settings)
+-
+     with open("data/settings.json", "w", encoding="utf-8") as f:
+         json.dump(settings, f, indent=4, ensure_ascii=False)
+ 
+diff --git a/routes/checkout.py b/routes/checkout.py
+index b0974fd..3632f7a 100644
+--- a/routes/checkout.py
++++ b/routes/checkout.py
+@@ -10,7 +10,7 @@ from reportlab.pdfbase.ttfonts import TTFont
+ from reportlab.pdfbase import pdfmetrics
+ from reportlab.lib import colors
+ 
+-from utility import get_product_by_id, send_http_email, get_coupon_by_id, delete_coupon_json
++from utility import get_product_by_id, send_http_email, get_coupon_by_id, delete_coupon_json, get_orders, add_order
+ 
+ checkout_blueprint = Blueprint("checkout", __name__, template_folder="./templates", root_path="/")
+ 
+@@ -37,6 +37,7 @@ def checkout():
+         "country": request.form.get("country"),
+         "city": request.form.get("city"),
+         "zip_code": request.form.get("zip_code"),
++        "captcha_text": request.form.get("captcha-text"),
+     }
+ 
+     items = []
+@@ -63,7 +64,6 @@ def checkout():
+     old_total: float = subtotal
+     discount_amount: float = 0
+ 
+-
+     if discount:
+         discount_value = discount.get("value", 0)
+         if discount.get("type", "absolute") == "absolute":
+@@ -76,130 +76,6 @@ def checkout():
+         
+         discount_amount: float = old_total-subtotal
+ 
+-    
+-
+-    pdf_buffer = BytesIO()
+-    c = canvas.Canvas(pdf_buffer, pagesize=A4)
+-    pdfmetrics.registerFont(TTFont("Helvetica", "Helvetica.ttf"))
+-    pdfmetrics.registerFont(TTFont("Helvetica-Bold", "Helvetica-Bold.ttf"))
+-
+-
+-    main_color = colors.HexColor("#326442")
+-
+-    logo_path = "uploads/Logo.jpg"
+-    c.drawImage(logo_path, 30, 750, height=70, width=150)
+-    c.setStrokeColor(main_color)
+-    c.setLineWidth(2)
+-    c.line(30, 745, 580, 745)
+-
+-    c.setFont("Helvetica-Bold", 18)
+-    c.setFillColor(main_color)
+-    c.drawString(460, 750, "RECHNUNG")
+-
+-    c.setFont("Helvetica", 10)
+-    c.setFillColor(colors.black)
+-    c.drawString(400, 680, f"Datum: {date.today().strftime('%d.%m.%Y')}")
+-    c.drawString(400, 665, "Rechnung Nr.: A002")
+-    c.drawString(400, 650, f"Fällig: {(date.today() + timedelta(days=7)).strftime('%d.%m.%Y')}")
+-
+-    c.setFont("Helvetica-Bold", 11)
+-    c.setFillColor(main_color)
+-    c.drawString(100, 680, "Rechnungsempfänger:")
+-    c.setFont("Helvetica", 10)
+-    c.setFillColor(colors.black)
+-    c.drawString(100, 665, f"{form_data['type']} {form_data['name']}")
+-    c.drawString(100, 650, f"{form_data['address']}")
+-    c.drawString(100, 635, f"{form_data['zip_code']} {form_data['city']}")
+-    c.drawString(100, 620, f"{form_data['country']}")
+-
+-    c.setFillColor(main_color)
+-    c.setFont("Helvetica-Bold", 11)
+-    c.drawString(50, 580, "Nr.")
+-    c.drawString(90, 580, "Artikelbezeichnung")
+-    c.drawString(230, 580, "Menge")
+-    c.drawString(290, 580, "Preis/Stk.")
+-    c.drawString(370, 580, "USt. %")
+-    c.drawString(430, 580, "USt. Betrag")
+-    c.drawString(510, 580, "Betrag")
+-    c.setLineWidth(1)
+-    c.line(30, 575, 580, 575)
+-
+-    y_position = 560
+-    for pos, item in enumerate(items, start=1):
+-        c.setFont("Helvetica", 10)
+-        c.setFillColor(colors.black)
+-        c.drawString(50, y_position, str(pos))
+-        c.drawString(240, y_position, str(item['quantity']))
+-        c.drawString(290, y_position, f"€ {item['unit_price']:,.2f}")
+-        c.drawString(375, y_position, f"{int(item['tax_rate'] * 100)}%")
+-        c.drawString(430, y_position, f"€ {item['unit_price']*item['tax_rate']*item['quantity']:,.2f}")
+-        c.drawString(510, y_position, f"€ {item['total']:,.2f}")
+-
+-        item_name_wrapped = wrap(item["name"], width=25)
+-
+-        for line in item_name_wrapped:
+-            c.drawString(90, y_position, line)
+-            y_position -= 12
+-            
+-        c.setLineWidth(0.5)
+-        c.line(30, y_position, 580, y_position)
+-        y_position -= 15
+-
+-    y_position -= 40
+-    c.setLineWidth(1)
+-
+-    c.setFont("Helvetica-Bold", 10)
+-    c.drawString(350, y_position, "Zwischensumme:")
+-    c.drawString(480, y_position, f"€ {old_total:,.2f}")
+-    y_position -= 15
+-    c.drawString(350, y_position, "Rabatt:")
+-    c.drawString(480, y_position, f"€ {round(discount_amount, 2):,.2f}")
+-    y_position -= 5
+-    c.line(350, y_position, 550, y_position)
+-    y_position -= 15
+-    c.drawString(350, y_position, "Enpreis:")
+-    c.drawString(480, y_position, f"€ {round(subtotal/1.2, 2):,.2f}")
+-    y_position -= 15
+-    c.drawString(350, y_position, "inkl. 20% USt.:")
+-    c.drawString(480, y_position, f"€ {tax:,.2f}")
+-    y_position -= 15
+-    c.drawString(350, y_position, "Nettobetrag:")
+-    c.drawString(480, y_position, f"€ {round(subtotal/1.2, 2):,.2f}")
+-    y_position -= 5
+-    c.line(350, y_position, 550, y_position)
+-    y_position -= 15
+-    c.setFont("Helvetica-Bold", 14)
+-    c.drawString(350, y_position, "Gesamtbetrag:")
+-    c.drawString(480, y_position, f"€ {subtotal:,.2f}")
+-
+-    y_position = 150
+-    c.setFont("Helvetica-Bold", 10)
+-    c.setFillColor(main_color)
+-    c.drawString(30, y_position, "Zahlungsbedingungen:")
+-
+-    c.setFont("Helvetica", 9)
+-    c.setFillColor(colors.black)
+-    c.drawString(30, y_position - 10, "Bitte überweisen Sie den fälligen Gesamtbetrag bis spätestens 7 Tage nach Erhalt der Rechnung")
+-    c.drawString(30, y_position - 20, "auf folgendes Konto: ATXX XXX XXXX XXXX. Zahlungsreferenz: FFFFFFFFFFFFFFFFFFFFFFFFFFFFf",)
+-
+-    y_position -= 50
+-    c.setLineWidth(10)
+-    c.line(30, y_position, 580, y_position)
+-    c.setFillColor(colors.black)
+-    c.setFont("Helvetica", 9)
+-    y_position -= 15
+-    c.drawString(50, y_position, "Birdie Club GmbH")
+-    c.drawString(50, y_position - 10, "Polgarstraße 24")
+-    c.drawString(50, y_position - 20, "1220 Wien")
+-    c.drawString(50, y_position - 30, "Österreich")
+-    c.drawString(350, y_position, "Kontaktinformation:")
+-    c.drawString(350, y_position - 10, "E-Mail: birdie2943@uebungsfirmen.at")
+-    c.drawString(350, y_position - 20, "Website: http://")
+-
+-    c.save()
+-
+-    pdf_buffer.seek(0)
+-
+     coupon_id = str(session.get("discount", {}).get("id", None))
+ 
+     coupon = get_coupon_by_id(coupon_id)
+@@ -214,32 +90,41 @@ def checkout():
+             if coupon["uses_remaining"] <= 0:
+                 delete_coupon_json(coupon_id)
+ 
++    # Generate a new order ID
++    orders = get_orders()
++    new_order_id = f"{1700000000 + len(orders) + 1}"
++
++    # Create order data
++    order_data = {
++        "id": new_order_id,
++        "email": form_data["email"],
++        "name": form_data["name"],
++        "type": form_data["type"],
++        "tel": form_data["tel"],
++        "address": form_data["address"],
++        "country": form_data["country"],
++        "city": form_data["city"],
++        "zip_code": form_data["zip_code"],
++        "items": items,
++        "total_price": subtotal,
++        "old_total": old_total,
++        "total_tax": tax,
++        "date": date.today().strftime('%d.%m.%Y'),
++        "status": "offen",
++        "notiz": "",
++        "discount": discount_amount
++    }
+ 
++    # Add the order to orders.json
++    add_order(order_data)
+ 
+-    #message: str = f"""
+-    #<body style="font-family: Arial, sans-serif; line-height: 1.5; color: var(--font-color);">
+-    #    <p>Lieber Kunde, <br>vielen Dank für Ihre Bestellung bei der <strong>Birdie Club GmbH</strong>!</p>
+-    #    <p>Im Anhang finden Sie die Rechnung zu Ihrer Bestellung. Bitte überprüfen Sie die Angaben und bewahren Sie die Rechnung für Ihre Unterlagen auf.</p>
+-    #    <p>
+-    #        <strong>Bestellnummer:</strong> 1234 <br>
+-    #        <strong>Bestelldatum:</strong> {date.today().strftime('%d.%m.%Y')} <br>
+-    #        <strong>Rechnungsbetrag:</strong> € {subtotal:,.2f}
+-    #    </p>
+-    #    <p>Falls Sie Fragen zu Ihrer Bestellung haben, stehen wir Ihnen gerne unter <a href="mailto:birdie2943@uebungsfirmen.at">birdie2943@uebungsfirmen.at</a> oder telefonisch unter <strong>[Telefonnummer]</strong> zur Verfügung.</p>
+-    #    <p>Vielen Dank, dass Sie sich für uns entschieden haben. Wir freuen uns, Sie bald wieder als Kunden begrüßen zu dürfen!</p>
+-    #    <p>Mit sportlichen Grüßen,<br>
+-    #    <strong>Ihr Team von Birdie Club GmbH</strong></p>
+-    #</body>
+-    #"""
+-    #email_thread = threading.Thread(target=send_http_email, args=([form_data["email"]], ["birdie2943@uebungsfirmen.at"], "Vielen Dank für Ihre Bestellung bei Birdie Club GmbH!", message, pdf_buffer))
+-    #email_thread.start()
+-
+-
+-
+-    session.pop("cart")
+-    session.pop("cart_sums")
+-    session.pop("discount")
+-    session.modified = True
++    try:
++        session.pop("cart")
++        session.pop("cart_sums")
++        session.pop("discount")
++        session.modified = True
++    except KeyError:
++        pass
+ 
+     return render_template("checkout_done.jinja-html")
+ 
+diff --git a/routes/internal.py b/routes/internal.py
+index c535e91..8fe3577 100644
+--- a/routes/internal.py
++++ b/routes/internal.py
+@@ -8,16 +8,15 @@ import zipfile
+ from datetime import date, datetime
+ 
+ import psutil
+-from flask import request, jsonify, abort, session, Blueprint, send_file, url_for, redirect, render_template
++from flask import request, jsonify, abort, session, Blueprint, send_file, url_for, redirect, make_response
+ from flask_wtf.csrf import validate_csrf
+ 
+ from FlaskClass import app, csrf
+ from logging_utility import logger
+-from utility import sanitize_path, send_http_email, delete_product_json, delete_coupon_json, get_products, generate_captcha, delete_event_json, convert_markdown_to_html, get_product_by_id, get_settings, get_coupon_by_id, query_events, get_coupons, get_events, add_contact_request, add_event
++from utility import sanitize_path, generate_captcha, convert_markdown_to_html, query_events, create_invoice_pdf, get_product_by_id, get_settings, get_coupon_by_id, get_products, get_coupons, get_events, add_contact_request, add_event, get_order_by_id, delete_product_json, delete_coupon_json, delete_order_json, delete_event_json
+ 
+ internal_blueprint = Blueprint("internal", __name__, template_folder="./templates")
+ 
+-
+ # =====================================
+ # File Handling Routes
+ # =====================================
+@@ -75,7 +74,6 @@ def download(filepath):
+         logger.error(f"Invalid path provided | Path: {filepath}")
+         abort(400, description="Invalid path provided.")
+ 
+-
+ # =====================================
+ # API Routes
+ # =====================================
+@@ -214,8 +212,6 @@ def calculate_cart():
+         
+         discount_amount: float = old_total-total
+ 
+-
+-
+     session["cart_sums"] = {"total": total, "tax": tax, "total_discount": discount_amount, "old_total": old_total}
+     session.modified = True
+     logger.info(f"Cart calculated successfully | Total: {total} | Tax: {tax} | Discount: {discount_amount}")
+@@ -246,7 +242,6 @@ def check_discount():
+         logger.warning("Attempt to apply multiple discount codes")
+         return {"error": "Es kann nur 1 Code aufeinmal eingelöst werden!"}, 404
+ 
+-
+     if not discount_id:
+         logger.warning("Code ID is missing in the check discount request")
+         return abort(400)
+@@ -260,7 +255,6 @@ def check_discount():
+     remaining = coupon.get("uses_remaining", 0)
+     valid_till = coupon.get("valid_till", None)
+ 
+-
+     if (remaining is not None and remaining <= 0) or (valid_till is not None and (not datetime.strptime(valid_till, "%y-%m-%d") < datetime.today())):
+         logger.warning(f"Coupon is invalid or expired | Coupon ID: {discount_id}")
+         return {"error": "Coupon ist ungültig oder abgelaufen!"}, 404
+@@ -290,7 +284,6 @@ def remove_discount():
+         logger.warning("No active discount code to remove")
+         return {"error": "Es ist aktuell kein Code aktiv!"}, 404
+ 
+-    
+     session.permanent = True
+     session["discount"] = {}
+     session.modified = True
+@@ -363,7 +356,6 @@ def upload_file():
+ 
+     return jsonify({"status": "Files uploaded successfully"}), 200
+ 
+-
+ # This function handles file deletions
+ @internal_blueprint.route("/api/files/delete", methods=["DELETE"])
+ @csrf.exempt
+@@ -406,7 +398,6 @@ def delete_media():
+     logger.info("Files deleted successfully")
+     return jsonify({"status": "Files deleted successfully"}), 200
+ 
+-
+ # This function handles renaming files and directories
+ @internal_blueprint.route("/api/files/rename", methods=["POST"])
+ @csrf.exempt
+@@ -431,7 +422,6 @@ def rename_path():
+         file_name = file_name.replace("\\", "/").lstrip("/")
+         new_name = new_name.replace("\\", "/").lstrip("/")
+ 
+-
+     clean_path = sanitize_path(os.path.join(root, path, file_name))
+     new_clean_name = sanitize_path(os.path.join(root, path, new_name))
+ 
+@@ -454,7 +444,6 @@ def rename_path():
+     logger.info(f"Path renamed successfully | Old Path: {clean_path} | New Path: {new_clean_name}")
+     return jsonify({"status": "Path renamed successfully"}), 200
+ 
+-
+ # This function handles copying files and directories
+ @internal_blueprint.route("/api/files/copy", methods=["POST"])
+ @csrf.exempt
+@@ -479,7 +468,6 @@ def copy_path():
+         file_name = file_name.replace("\\", "/").lstrip("/")
+         new_name = new_name.replace("\\", "/").lstrip("/")
+ 
+-
+     clean_path = sanitize_path(os.path.join(root, path, file_name))
+     new_clean_name = sanitize_path(os.path.join(root, path, new_name))
+ 
+@@ -645,6 +633,24 @@ def delete_coupon():
+     logger.info(f"Coupon deleted successfully | Coupon ID: {coupons_id}")
+     return redirect(url_for("admin.coupons"))
+ 
++# This function deletes an order
++@internal_blueprint.route("/api/delete-order")
++@csrf.exempt
++def delete_order():
++    logger.info("GET request received for deleting order")
++    if not session.get("login", False):
++        logger.warning("Unauthorized delete order attempt")
++        return abort(403)
++
++    order_id: str|None = request.args.get("id", None)
++
++    if order_id is None:
++        logger.warning("No order provided for deletion")
++        return {"error": "No order provided"}, 405
++    
++    delete_order_json(order_id)
++    logger.info(f"Order deleted successfully | Order ID: {order_id}")
++    return redirect(url_for("admin.orders"))
+ 
+ # This function converts markdown to HTML
+ @internal_blueprint.route("/api/markdown-to-html/", methods=["POST"])
+@@ -673,7 +679,6 @@ def clear_cache():
+     logger.info("Cache cleared successfully")
+     return jsonify({"sucess": "Cache cleared sucessfully!"})
+ 
+-
+ # This function retrieves system information
+ @internal_blueprint.route("/api/get-system-info/", methods=["GET"])
+ def get_system_info():
+@@ -730,7 +735,6 @@ def get_events_route():
+     logger.info("Events retrieved successfully")
+     return jsonify(events)
+ 
+-
+ # This function adds events
+ @internal_blueprint.route("/api/add-events/", methods=["POST"])
+ def add_events():
+@@ -787,7 +791,6 @@ def add_events():
+ 
+     return jsonify({"message": "Event added successfully", "event": new_event}), 201
+ 
+-
+ # This function deletes an event
+ @internal_blueprint.route("/api/delete-event")
+ @csrf.exempt
+@@ -843,4 +846,26 @@ def get_logs():
+         "logs": clean_lines
+     })
+ 
++# This function creates an invoice for an order
++@internal_blueprint.route("/api/create-invoice/<order_id>", methods=["GET"])
++@csrf.exempt
++def create_invoice(order_id):
++    logger.info(f"GET request received for creating invoice | Order ID: {order_id}")
++    if not session.get("login", False):
++        logger.warning("Unauthorized create invoice attempt")
++        return abort(403)
++
++    order = get_order_by_id(order_id)
++    if not order:
++        logger.warning(f"Order not found | Order ID: {order_id}")
++        return abort(404, description="Order not found.")
++
++    pdf_buffer = create_invoice_pdf(order)
++    response = make_response(pdf_buffer.getvalue())
++    response.headers["Content-Disposition"] = f"attachment; filename=invoice_{order_id}.pdf"
++    response.mimetype = "application/pdf"
++
++    logger.info(f"Invoice created successfully | Order ID: {order_id}")
++    return response
++
+ 
+diff --git a/routes/legal.py b/routes/legal.py
+index d2a1b3a..ffc57e3 100644
+--- a/routes/legal.py
++++ b/routes/legal.py
+@@ -1,4 +1,4 @@
+-from flask import Blueprint, render_template, render_template_string
++from flask import Blueprint, render_template
+ from logging_utility import logger
+ 
+ legal_blueprint = Blueprint("legal", __name__, url_prefix="/rechtliches")
+diff --git a/routes/other_routes.py b/routes/other_routes.py
+index a91c21e..b52a0d1 100644
+--- a/routes/other_routes.py
++++ b/routes/other_routes.py
+@@ -1,4 +1,4 @@
+-from flask import abort, Blueprint, render_template
++from flask import Blueprint, render_template
+ from logging_utility import logger
+ 
+ other_blueprint = Blueprint("other", __name__)
+diff --git a/static/css/admin/edit-order.css b/static/css/admin/edit-order.css
+index aefae2c..7e7cb73 100644
+--- a/static/css/admin/edit-order.css
++++ b/static/css/admin/edit-order.css
+@@ -117,15 +117,27 @@ select:focus {
+     margin-left: 10px;
+ }
+ 
++.invoice-btn.colorful-btn {
++    background-color: #4caf50;
++    text-align: center;
++    padding: 10px 20px;
++    border-radius: 5px;
++    text-decoration: none;
++    color: var(--secondary-font-color);
++    margin-left: 10px;
++}
++
+ .submit-btn:hover,
+ .cancel-btn:hover,
+-.antworten-btn:hover {
++.antworten-btn:hover,
++.invoice-btn.colorful-btn:hover {
+     opacity: 0.9;
+ }
+ 
+ .submit-btn i,
+ .cancel-btn i,
+-.antworten-btn i {
++.antworten-btn i,
++.invoice-btn.colorful-btn i {
+     margin-right: 5px;
+ }
+ 
+@@ -135,6 +147,32 @@ select:focus {
+     margin-top: 10px;
+ }
+ 
++table.info {
++    width: 100%;
++    border-collapse: collapse;
++    margin-top: 10px;
++}
++
++table.info th,
++table.info td {
++    border: 1px solid #ddd;
++    padding: 8px;
++    text-align: left;
++}
++
++table.info th {
++    background-color: var(--main-color);
++    color: white;
++}
++
++table.info tr:nth-child(even) {
++    background-color: #f2f2f2;
++}
++
++table.info tr:hover {
++    background-color: #ddd;
++}
++
+ @media (max-width: 768px) {
+     .edit-order-form {
+         padding: 15px;
+diff --git a/static/css/admin/orders.css b/static/css/admin/orders.css
+index fa65351..f13c8c7 100644
+--- a/static/css/admin/orders.css
++++ b/static/css/admin/orders.css
+@@ -1,46 +1,109 @@
+ @import url(../root.css);
+ 
+-.orders-table {
++
++.orders-list {
++    list-style: none;
++    padding: 0;
++    margin: 0;
+     width: 100%;
+-    border-collapse: collapse;
+-    margin: 20px 0;
+-    font-size: 1rem;
+-    text-align: left;
+ }
+ 
+-.orders-table th,
+-.orders-table td {
+-    padding: 12px 15px;
++.order-item {
++    display: flex;
++    align-items: center;
++    justify-content: space-between;
+     border: 1px solid #ddd;
++    border-radius: 5px;
++    padding: 15px;
++    margin-bottom: 15px;
++    background-color: var(--main-bg);
++    transition: background-color 0.3s ease;
++    width: 100%;
+ }
+ 
+-.orders-table th {
+-    background-color: var(--main-color);
+-    color: var(--secondary-font-color);
++.order-item:hover {
++    background-color: var(--secondary-bg);
++}
++
++.order-info {
++    flex: 1;
++    margin-right: 20px;
+ }
+ 
+-.orders-table tr:nth-child(even) {
+-    background-color: #f9f9f9;
++.order-info h3 {
++    color: var(--main-color);
++    font-size: 1.2rem;
++    margin: 0;
+ }
+ 
+-.orders-table tr:hover {
+-    background-color: #f1f1f1;
++.order-info p {
++    font-size: 0.9rem;
++    color: var(--third-font-color);
++}
++
++.order-total {
++    margin-inline: 30px;
++    font-size: 1.2rem;
++    color: var(--font-color);
++    margin-bottom: 5px;
++}
++
++.order-status {
++    width: 55px;
++    text-align: right;
++    font-size: 1.2rem;
++    color: var(--font-color);
++    margin-bottom: 5px;
++    margin-right: 20px;
++}
++
++.order-actions {
++    display: flex;
++    gap: 10px;
+ }
+ 
+ .btn {
+-    padding: 8px 12px;
+-    font-size: 1rem;
++    padding: 8px 15px;
++    font-size: 0.9rem;
+     color: var(--secondary-font-color);
+     border-radius: 5px;
+     text-decoration: none;
+     text-align: center;
+-    background-color: var(--main-color);
++}
++
++.view-btn {
++    background-color: #2196F3;
+ }
+ 
+ .edit-btn {
+     background-color: var(--secondary-color);
+ }
+ 
++.delete-btn {
++    background-color: #f44336; /* Red color */
++}
++
+ .btn:hover {
+     opacity: 0.9;
+ }
++
++.product-filters {
++    display: flex;
++    gap: 10px;
++    width: 100%;
++    margin-bottom: 20px;
++}
++
++.product-filters > div, form {
++    width: 100%;
++}
++
++.product-filters .search-bar input,
++.product-filters .sort-options select,
++.product-filters .filter-menu select {
++    padding: 10px;
++    border: 1px solid #ccc;
++    border-radius: 4px;
++    font-size: 1rem;
++    width: 100%;
++}
+diff --git a/templates/403.jinja-html b/templates/403.jinja-html
+index 9a765af..a5c61db 100644
+--- a/templates/403.jinja-html
++++ b/templates/403.jinja-html
+@@ -1,19 +1,54 @@
+ <!DOCTYPE html>
+-<html lang="en">
++<html lang="de">
+ <head>
+     <meta charset="UTF-8">
+     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+-    <title>Cart - Birdie Club GmbH</title>
++    <title>Zugriff verweigert - Birdie Club GmbH</title>
+     <link rel="stylesheet" href="{{ url_for('static', filename='css/root.css') }}">
+     <link rel="shortcut icon" href="{{ url_for('internal.uploads', filename='Logo.png') }}" type="image">
+-    
++    <style>
++        .container {
++            display: flex;
++            flex-direction: column;
++            justify-content: center;
++            align-items: center;
++            height: 70vh;
++            text-align: center;
++            background-color: #f8f9fa;
++        }
++        .container h1 {
++            font-size: 3rem;
++            margin-bottom: 1rem;
++            color: #333;
++        }
++        .container p {
++            font-size: 1.2rem;
++            margin-bottom: 2rem;
++            color: #666;
++        }
++        .container a {
++            display: inline-block;
++            padding: 0.8rem 1.5rem;
++            background-color: var(--main-color);
++            color: white;
++            text-decoration: none;
++            border-radius: 5px;
++            font-size: 1rem;
++        }
++        .container a:hover {
++            background-color: var(--secondary-color);
++        }
++    </style>
+ </head>
+-
+ <body>
+     {% include "snippets/navbar.jinja-html" %}
+-    <h1>Forbidden</h1>
+-    <br>
+-    <h1>Error 403</h1>
++    <div class="container">
++        <h1>Fehler 403</h1>
++        <p>Sie haben keine Berechtigung, diese Seite zu sehen.</p>
++        <p>Bitte überprüfen Sie, ob Sie die richtige URL eingegeben haben.</p>
++        <p>Wenn Sie glauben, dass dies ein Fehler ist, kontaktieren Sie bitte den Administrator.</p>
++        <a href="/">Zurück zur Startseite</a>
++    </div>
+     {% include "snippets/footer.jinja-html" %}
+ </body>
+ </html>
+\ No newline at end of file
+diff --git a/templates/404.jinja-html b/templates/404.jinja-html
+index 2540076..50ef83f 100644
+--- a/templates/404.jinja-html
++++ b/templates/404.jinja-html
+@@ -1,19 +1,54 @@
+ <!DOCTYPE html>
+-<html lang="en">
++<html lang="de">
+ <head>
+     <meta charset="UTF-8">
+     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+-    <title>Cart - Birdie Club GmbH</title>
++    <title>Seite nicht gefunden - Birdie Club GmbH</title>
+     <link rel="stylesheet" href="{{ url_for('static', filename='css/root.css') }}">
+     <link rel="shortcut icon" href="{{ url_for('internal.uploads', filename='Logo.png') }}" type="image">
+-    
++    <style>
++        .container {
++            display: flex;
++            flex-direction: column;
++            justify-content: center;
++            align-items: center;
++            height: 70vh;
++            text-align: center;
++            background-color: #f8f9fa;
++        }
++        .container h1 {
++            font-size: 3rem;
++            margin-bottom: 1rem;
++            color: #333;
++        }
++        .container p {
++            font-size: 1.2rem;
++            margin-bottom: 2rem;
++            color: #666;
++        }
++        .container a {
++            display: inline-block;
++            padding: 0.8rem 1.5rem;
++            background-color: var(--main-color);
++            color: white;
++            text-decoration: none;
++            border-radius: 5px;
++            font-size: 1rem;
++        }
++        .container a:hover {
++            background-color: var(--secondary-color);
++        }
++    </style>
+ </head>
+-
+ <body>
+     {% include "snippets/navbar.jinja-html" %}
+-    <h1>PAGE not Found</h1>
+-    <br>
+-    <h1>Error 404</h1>
++    <div class="container">
++        <h1>Fehler 404</h1>
++        <p>Die Seite, die Sie suchen, konnte nicht gefunden werden.</p>
++        <p>Es könnte sein, dass die Seite verschoben wurde oder nicht mehr existiert.</p>
++        <p>Bitte überprüfen Sie die URL oder gehen Sie zurück zur Startseite.</p>
++        <a href="/">Zurück zur Startseite</a>
++    </div>
+     {% include "snippets/footer.jinja-html" %}
+ </body>
+ </html>
+\ No newline at end of file
+diff --git a/templates/about.jinja-html b/templates/about.jinja-html
+index a690bf8..644153a 100644
+--- a/templates/about.jinja-html
++++ b/templates/about.jinja-html
+@@ -1,5 +1,5 @@
+ <!DOCTYPE html>
+-<html lang="en">
++<html lang="de">
+ <head>
+     <meta charset="UTF-8">
+     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+diff --git a/templates/admin/add-coupon.jinja-html b/templates/admin/add-coupon.jinja-html
+index 4f487e9..05b78cc 100644
+--- a/templates/admin/add-coupon.jinja-html
++++ b/templates/admin/add-coupon.jinja-html
+@@ -5,7 +5,7 @@
+     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     <link rel="shortcut icon" href="{{ url_for('internal.uploads', filename='Logo.png') }}" type="image">
+     <link rel="stylesheet" href="{{ url_for('static', filename='css/admin/edit-coupon.css') }}">
+-    <title>Admin Panel - Birdie Club GmbH</title>
++    <title>Admin Panel - Coupon erstellen</title>
+ </head>
+ <body>
+     <div class="main-container">
+diff --git a/templates/admin/add-product.jinja-html b/templates/admin/add-product.jinja-html
+index 355d718..c67a2f3 100644
+--- a/templates/admin/add-product.jinja-html
++++ b/templates/admin/add-product.jinja-html
+@@ -5,7 +5,7 @@
+     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     <link rel="shortcut icon" href="{{ url_for('internal.uploads', filename='Logo.png') }}" type="image">
+     <link rel="stylesheet" href="{{ url_for('static', filename='css/admin/edit-product.css') }}">
+-    <title>Admin Panel - Birdie Club GmbH</title>
++    <title>Admin Panel - Produkt erstellen</title>
+ </head>
+ <body>
+     <div class="main-container">
+@@ -118,7 +118,7 @@
+                 </div>
+                 <div class="form-actions">
+                     <button type="submit" class="btn submit-btn">Speichern</button>
+-                    <a href="/admin/produkte/alle" class="btn cancel-btn" onclick="return alert('Bist du sicher, dass du abbrechen willst? Alle Änderungen gehen dabei verloren!')">Abbrechen</a>
++                    <a href="/admin/produkte/alle" class="btn cancel-btn" onclick="return confirm('Bist du sicher, dass du abbrechen willst? Alle Änderungen gehen dabei verloren!')">Abbrechen</a>
+                 </div>
+             </form>
+         </div>
+diff --git a/templates/admin/admin.jinja-html b/templates/admin/admin.jinja-html
+index 5dd8526..bf232fb 100644
+--- a/templates/admin/admin.jinja-html
++++ b/templates/admin/admin.jinja-html
+@@ -5,7 +5,7 @@
+     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     <link rel="shortcut icon" href="{{ url_for('internal.uploads', filename='Logo.png') }}" type="image">
+     <link rel="stylesheet" href="{{ url_for('static', filename='css/admin/admin.css') }}">
+-    <title>Admin Panel - Birdie Club GmbH</title>
++    <title>Admin Panel - Übersicht</title>
+ </head>
+ <body>
+     <div class="main-container">
+diff --git a/templates/admin/all-coupons.jinja-html b/templates/admin/all-coupons.jinja-html
+index 7633e1f..a881826 100644
+--- a/templates/admin/all-coupons.jinja-html
++++ b/templates/admin/all-coupons.jinja-html
+@@ -5,7 +5,7 @@
+     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     <link rel="shortcut icon" href="{{ url_for('internal.uploads', filename='Logo.png') }}" type="image">
+     <link rel="stylesheet" href="{{ url_for('static', filename='css/admin/all-coupons.css') }}">
+-    <title>Admin Panel - Birdie Club GmbH</title>
++    <title>Admin Panel - Coupons</title>
+ </head>
+ <body>
+     <div class="main-container">
+diff --git a/templates/admin/all-products.jinja-html b/templates/admin/all-products.jinja-html
+index 1656b70..e48b38f 100644
+--- a/templates/admin/all-products.jinja-html
++++ b/templates/admin/all-products.jinja-html
+@@ -5,7 +5,7 @@
+     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     <link rel="shortcut icon" href="{{ url_for('internal.uploads', filename='Logo.png') }}" type="image">
+     <link rel="stylesheet" href="{{ url_for('static', filename='css/admin/all-products.css') }}">
+-    <title>Admin Panel - Birdie Club GmbH</title>
++    <title>Admin Panel - Produkte</title>
+ </head>
+ <body>
+     <div class="main-container">
+diff --git a/templates/admin/appearance.jinja-html b/templates/admin/appearance.jinja-html
+index 46270f4..05f277f 100644
+--- a/templates/admin/appearance.jinja-html
++++ b/templates/admin/appearance.jinja-html
+@@ -1,11 +1,11 @@
+ <!DOCTYPE html>
+-<html lang="en">
++<html lang="de">
+ <head>
+     <meta charset="UTF-8">
+     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+-    <link rel="shortcut icon" href="{{ url_for('internal.uploads', filename='Logo.png') }}" type="image/png">
++    <link rel="shortcut icon" href="{{ url_for('internal.uploads', filename='Logo.png') }}" type="image">
+     <link rel="stylesheet" href="{{ url_for('static', filename='css/admin/appearance.css') }}">
+-    <title>Admin Panel - Birdie Club GmbH</title>
++    <title>Admin Panel - Erscheinungsbild</title>
+ </head>
+ <body>
+     <div class="main-container">
+@@ -17,14 +17,13 @@
+                     {% for property_name, property in styles.items() %}
+                         <div class="form-group">
+                             <label for="{{ property_name }}">{{ property_name }}:</label>
+-                            <input type="color"  id="{{ property_name }}" name="{{ property_name }}" value="{{ property }}" onchange="updateContrastRatios()" data-original="{{ property }}">
++                            <input type="color" id="{{ property_name }}" name="{{ property_name }}" value="{{ property }}" onchange="updateContrastRatios()" data-original="{{ property }}">
+                             <button type="button" class="reset-value" onclick="resetColor(event)"><i class="fa-solid fa-arrow-rotate-left"></i></button>
+-                        </div>  
++                        </div>
+                     {% endfor %}
+                     <button type="button" class="btn-preview" onclick="openModal()"><i class="fa-solid fa-eye"></i> Vorschau</button>
+-                    <button type="submit" class="btn-save"> <i class="fa-solid fa-floppy-disk"></i> Speichern</button>
++                    <button type="submit" class="btn-save"><i class="fa-solid fa-floppy-disk"></i> Speichern</button>
+                 </form>
+-                
+                 <div class="palette-creation">
+                     <h3>Farbpalette - Kontrast</h3>
+                     <table id="contrast-table">
+@@ -101,13 +100,11 @@
+                                 <td id="warning-main-bg-contrast"></td>
+                                 <td id="warning-main-bg-rating"></td>
+                             </tr>
+-                            <tr  class="note-row">
++                            <tr class="note-row">
+                                 <td colspan="3">
+                                     Hinweis: Die folgenden Kontrastverhältnisse werden zwar angezeigt, sind jedoch nicht relevant für die Bewertung der Farbpalette.
+                                 </td>
+                             </tr>
+-                            
+-                            <!-- Last 4 rows with a special class for styling -->
+                             <tr class="irrelevant-row">
+                                 <td>1. Schriftfarbe zu Drittem-Hintergrund</td>
+                                 <td id="font1-third-bg-contrast"></td>
+@@ -132,7 +129,6 @@
+                     </table>
+                 </div>
+             </div>
+-            
+             <div id="preview-modal" class="modal" onclick="closeModal(event)">
+                 <div class="modal-content">
+                     <iframe src="/" frameborder="0" id="preview-iframe" onload="updatePreview()"></iframe>
+@@ -141,7 +137,6 @@
+             </div>
+         </div>
+     </div>
+-
+     <script src="{{ url_for('static', filename='js/admin/appearance.js')}}"></script>
+ </body>
+ </html>
+diff --git a/templates/admin/categories.jinja-html b/templates/admin/categories.jinja-html
+index 54dd4fb..f59b461 100644
+--- a/templates/admin/categories.jinja-html
++++ b/templates/admin/categories.jinja-html
+@@ -5,7 +5,7 @@
+     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     <link rel="shortcut icon" href="{{ url_for('internal.uploads', filename='Logo.png') }}" type="image">
+     <link rel="stylesheet" href="{{ url_for('static', filename='css/admin/categories.css') }}">
+-    <title>Admin Panel - Birdie Club GmbH</title>
++    <title>Admin Panel - Kategorien</title>
+ </head>
+ <body>
+     <div class="main-container">
+@@ -26,7 +26,7 @@
+                                 <a href="/produkte?category={{category}}" target="_blank" rel="noopener noreferrer" class="btn view-btn"><i class="fas fa-eye"></i></a>
+ 
+                                 <!-- Delete Button -->
+-                                <a class="btn delete-btn"><i class="fas fa-trash-alt"></i></a>
++                                <a class="btn delete-btn" onclick="return confirm('Bist du sicher, dass du diese Kategorie löschen möchtest?')"><i class="fas fa-trash-alt"></i></a>
+                             </div>
+                         </div>
+                     {% else %}
+diff --git a/templates/admin/contact-requests.jinja-html b/templates/admin/contact-requests.jinja-html
+index 951f343..3543be4 100644
+--- a/templates/admin/contact-requests.jinja-html
++++ b/templates/admin/contact-requests.jinja-html
+@@ -5,7 +5,7 @@
+     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     <link rel="shortcut icon" href="{{ url_for('internal.uploads', filename='Logo.png') }}" type="image">
+     <link rel="stylesheet" href="{{ url_for('static', filename='css/admin/contact-requests.css') }}">
+-    <title>Admin Panel - Birdie Club GmbH</title>
++    <title>Admin Panel - Kontaktanfragen</title>
+ </head>
+ <body>
+     <div class="main-container">
+diff --git a/templates/admin/edit-contact-request.jinja-html b/templates/admin/edit-contact-request.jinja-html
+index 8e0872c..8cc8d5d 100644
+--- a/templates/admin/edit-contact-request.jinja-html
++++ b/templates/admin/edit-contact-request.jinja-html
+@@ -1,8 +1,9 @@
+ <!DOCTYPE html>
+-<html lang="en">
++<html lang="de">
+ <head>
+     <meta charset="UTF-8">
+-    <title>Edit Contact Request</title>
++    <title>Admin Panel - Kontaktanfrage bearbeiten</title>
++    <link rel="shortcut icon" href="{{ url_for('internal.uploads', filename='Logo.png') }}" type="image">
+     <link rel="stylesheet" href="{{ url_for('static', filename='css/admin/edit-contact-request.css') }}">
+ </head>
+ <body>
+diff --git a/templates/admin/edit-coupon.jinja-html b/templates/admin/edit-coupon.jinja-html
+index 8cd5e12..ba0f95e 100644
+--- a/templates/admin/edit-coupon.jinja-html
++++ b/templates/admin/edit-coupon.jinja-html
+@@ -5,7 +5,7 @@
+     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     <link rel="shortcut icon" href="{{ url_for('internal.uploads', filename='Logo.png') }}" type="image">
+     <link rel="stylesheet" href="{{ url_for('static', filename='css/admin/edit-coupon.css') }}">
+-    <title>Admin Panel - Birdie Club GmbH</title>
++    <title>Admin Panel - Coupon bearbeiten</title>
+ </head>
+ <body>
+     <div class="main-container">
+diff --git a/templates/admin/edit-order.jinja-html b/templates/admin/edit-order.jinja-html
+index 0b1e99b..a4c8f3b 100644
+--- a/templates/admin/edit-order.jinja-html
++++ b/templates/admin/edit-order.jinja-html
+@@ -14,22 +14,59 @@
+ 
+             <form method="post" class="edit-order-form">
+                 <input type="hidden" id="csrf_token" name="csrf_token" value="{{ generate_token() }}">
+-                <div class="form-group">
+-                    <label for="email" class="info-label">Email:</label>
+-                    <p id="email" class="info">{{ order.email }}</p>
+-                </div>
+-                <div class="form-group">
+-                    <label for="name" class="info-label">Name:</label>
+-                    <p id="name" class="info">{{ order.name }}</p>
+-                </div>
+-                <div class="form-group">
+-                    <label for="product" class="info-label">Produkt:</label>
+-                    <p id="product" class="info">{{ order.product }}</p>
+-                </div>
+-                <div class="form-group">
+-                    <label for="date" class="info-label">Datum:</label>
+-                    <p id="date" class="info">{{ order.date }}</p>
++
++                <!-- Order Information -->
++                <div class="order-info">
++                    <div class="form-group">
++                        <label for="email" class="info-label">Email:</label>
++                        <p id="email" class="info">{{ order.email }}</p>
++                    </div>
++                    <div class="form-group">
++                        <label for="name" class="info-label">Name:</label>
++                        <p id="name" class="info">{{ order.name }}</p>
++                    </div>
++                    <div class="form-group">
++                        <label for="address" class="info-label">Adresse:</label>
++                        <p id="address" class="info">{{ order.address }}</p>
++                    </div>
++                    <div class="form-group">
++                        <label for="date" class="info-label">Datum:</label>
++                        <p id="date" class="info">{{ order.date }}</p>
++                    </div>
++                    <div class="form-group">
++                        <label for="total_price" class="info-label">Gesamtpreis:</label>
++                        <p id="total_price" class="info">{{ order.total_price }}</p>
++                    </div>
++                    <div class="form-group">
++                        <label for="discount" class="info-label">Rabatt:</label>
++                        <p id="discount" class="info">{{ order.discount }}</p>
++                    </div>
++                    <div class="form-group">
++                        <label for="items" class="info-label">Artikel:</label>
++                        <table id="items" class="info">
++                            <thead>
++                                <tr>
++                                    <th>Name</th>
++                                    <th>Menge</th>
++                                    <th>Preis/Stk.</th>
++                                    <th>Gesamt</th>
++                                </tr>
++                            </thead>
++                            <tbody>
++                                {% for item in order.get("items") %}
++                                    <tr>
++                                        <td>{{ item.name }}</td>
++                                        <td>{{ item.quantity }}</td>
++                                        <td>{{ item.unit_price }}</td>
++                                        <td>{{ item.total }}</td>
++                                    </tr>
++                                {% endfor %}
++                            </tbody>
++                        </table>
++                    </div>
+                 </div>
++
++                <!-- Editable Fields -->
+                 <div class="form-group">
+                     <label for="status">Status:</label>
+                     <select name="status" id="status">
+@@ -42,12 +79,14 @@
+                     <label for="notiz">Notiz:</label>
+                     <textarea name="notiz" id="notiz">{{ order.notiz }}</textarea>
+                 </div>
++
+                 <div class="form-actions">
+                     <div class="left-actions">
+                         <button type="submit" class="btn submit-btn"><i class="fas fa-save"></i> Speichern</button>
+                         <a href="mailto:{{ order.email }}?subject=Antwort auf Ihre Bestellung: {{ order.product }}" class="btn antworten-btn"><i class="fas fa-reply"></i> Antworten</a>
++                        <a href="{{ url_for('internal.create_invoice', order_id=order.id) }}" class="btn invoice-btn colorful-btn"><i class="fas fa-file-invoice"></i> Rechnung erstellen</a>
+                     </div>
+-                    <a href="/admin/bestellungen" class="btn cancel-btn" onclick="return confirm('Bist du sicher, dass du abbrechen willst? Alle Änderungen gehen dabei verloren!')">Abbrechen</a>
++                    <a href="/admin/anfragen/bestellungen" class="btn cancel-btn" onclick="return confirm('Bist du sicher, dass du abbrechen willst? Alle Änderungen gehen dabei verloren!')">Abbrechen</a>
+                 </div>
+             </form>
+         </div>
+diff --git a/templates/admin/edit-product.jinja-html b/templates/admin/edit-product.jinja-html
+index c06c9db..6332a4f 100644
+--- a/templates/admin/edit-product.jinja-html
++++ b/templates/admin/edit-product.jinja-html
+@@ -5,7 +5,7 @@
+     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     <link rel="shortcut icon" href="{{ url_for('internal.uploads', filename='Logo.png') }}" type="image">
+     <link rel="stylesheet" href="{{ url_for('static', filename='css/admin/edit-product.css') }}">
+-    <title>Admin Panel - Birdie Club GmbH</title>
++    <title>Admin Panel - Produkt bearbeiten</title>
+ </head>
+ <body>
+     <div class="main-container">
+diff --git a/templates/admin/edit-static.jinja-html b/templates/admin/edit-static.jinja-html
+index 2236ff8..6567ecc 100644
+--- a/templates/admin/edit-static.jinja-html
++++ b/templates/admin/edit-static.jinja-html
+@@ -1,9 +1,9 @@
+ <!DOCTYPE html>
+-<html lang="en">
++<html lang="de">
+ <head>
+     <meta charset="UTF-8">
+     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+-    <title>CSS & JS bearbeiten</title>
++    <title>Admin Panel - CSS & JS bearbeiten</title>
+     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+     <link href="{{ url_for('static', filename='css/admin/media-library.css') }}" rel="stylesheet">
+     <link rel="shortcut icon" href="{{ url_for('internal.uploads', filename='Logo.png') }}" type="image">
+diff --git a/templates/admin/edit-template.jinja-html b/templates/admin/edit-template.jinja-html
+index b85f110..8da61e8 100644
+--- a/templates/admin/edit-template.jinja-html
++++ b/templates/admin/edit-template.jinja-html
+@@ -1,18 +1,16 @@
+ <!DOCTYPE html>
+-<html lang="en">
++<html lang="de">
+ <head>
+     <meta charset="UTF-8">
+     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+-    <title>Template bearbeiten</title>
++    <title>Admin Panel - Template bearbeiten</title>
+     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+     <link href="{{ url_for('static', filename='css/admin/edit-template.css') }}" rel="stylesheet">
+     <link rel="shortcut icon" href="{{ url_for('internal.uploads', filename='Logo.png') }}" type="image">
+-
+ </head>
+ <body>
+     <div class="main-container">
+         {% include "admin/sidebar.jinja-html" %}
+-
+         <div class="main-content">
+             <a href="/admin/aussehen/templates" class="back-button">
+                 <i class="fas fa-arrow-left"></i> Zurück
+@@ -23,7 +21,7 @@
+                 <textarea name="template_content" rows="20" cols="100">{{ template_content|safe }}</textarea>
+                 <br>
+                 <button type="submit">Speichern</button>
+-                <a href="/admin/aussehen/templates" class="cancel-button">
++                <a href="/admin/aussehen/templates" class="cancel-button" onclick="return confirm('Bist du sicher, dass du abbrechen willst? Alle Änderungen gehen dabei verloren!')">
+                     <i class="fas fa-times"></i> Abbrechen
+                 </a>
+             </form>
+diff --git a/templates/admin/edit-templates.jinja-html b/templates/admin/edit-templates.jinja-html
+index 46ede43..4cb74a6 100644
+--- a/templates/admin/edit-templates.jinja-html
++++ b/templates/admin/edit-templates.jinja-html
+@@ -1,21 +1,18 @@
+ <!DOCTYPE html>
+-<html lang="en">
++<html lang="de">
+ <head>
+     <meta charset="UTF-8">
+     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+-    <title>Templates bearbeiten</title>
++    <title>Admin Panel - Templates bearbeiten</title>
+     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+     <link href="{{ url_for('static', filename='css/admin/media-library.css') }}" rel="stylesheet">
+     <link rel="shortcut icon" href="{{ url_for('internal.uploads', filename='Logo.png') }}" type="image">
+-
+ </head>
+ <body>
+     <div class="main-container">
+         {% include "admin/sidebar.jinja-html" %}
+-
+         <div class="main-content">
+             <input type="hidden" id="csrf_token" name="csrf_token" value="{{ generate_token() }}">
+-
+             <div>
+                 <div class="toolbar">
+                     <input type="text" class="address-bar" id="address-bar" placeholder="Pfad eingeben" value="{{ path }}">
+@@ -23,9 +20,7 @@
+                         <i class="fa fa-arrow-left" aria-hidden="true"></i>
+                     </button>
+                     <button class="toolbar-btn" onclick="navigateToPath()">Los</button>
+-
+                     <button class="toolbar-btn" onclick="selectAllItems()">Alle Auswählen</button>
+-
+                     <div class="toolbar-separator"></div>
+                     <label for="sort-options" class="toolbar-label">Sortieren nach:</label>
+                     <select id="sort-options" class="toolbar-btn">
+@@ -50,10 +45,10 @@
+                     <button class="toolbar-btn" id="copy-btn" onclick="copyPath()">
+                         <i class="fa-solid fa-copy"></i> Kopieren
+                     </button>
+-                    <button class="toolbar-btn" id="paste-btn"  onclick="pastePath()">
++                    <button class="toolbar-btn" id="paste-btn" onclick="pastePath()">
+                         <i class="fa-solid fa-paste"></i> Einfügen
+                     </button>
+-                    <button class="toolbar-btn" id="delete-btn" onclick="deleteFiles()">
++                    <button class="toolbar-btn" id="delete-btn" onclick="return confirm('Bist du sicher, dass du löschen willst? Alle ausgewählten Dateien werden gelöscht!')">
+                         <i class="fa-solid fa-trash"></i> Löschen
+                     </button>
+                     <button class="toolbar-btn" id="edit-btn" onclick="renamePath()">
+@@ -61,8 +56,6 @@
+                     </button>
+                 </div>
+             </div>
+-
+-
+             <!-- Adjusted File Explorer Header for Proper Layout -->
+             <div class="file-explorer-header">
+                 <span class="checkbox-column">Ausw.</span>
+@@ -71,14 +64,11 @@
+                 <span>Art</span>
+                 <span>Größe</span>
+             </div>
+-
+             <div class="file-explorer-list" id="file-list">
+                 <!-- Files will be dynamically generated here -->
+             </div>
+         </div>
+     </div>
+-
+     <script src="{{ url_for('static', filename='js/admin/edit-templates.js') }}"></script>
+-
+ </body>
+ </html>
+diff --git a/templates/admin/general-settings.jinja-html b/templates/admin/general-settings.jinja-html
+index 3c7d933..8c2d045 100644
+--- a/templates/admin/general-settings.jinja-html
++++ b/templates/admin/general-settings.jinja-html
+@@ -5,7 +5,7 @@
+     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     <link rel="shortcut icon" href="{{ url_for('internal.uploads', filename='Logo.png') }}" type="image">
+     <link rel="stylesheet" href="{{ url_for('static', filename='css/admin/settings.css') }}">
+-    <title>Admin Panel - Birdie Club GmbH</title>
++    <title>Admin Panel - Allgemeine Einstellungen</title>
+ </head>
+ <body>
+     <div class="main-container">
+diff --git a/templates/admin/login.jinja-html b/templates/admin/login.jinja-html
+index 272c64f..0f6f24c 100644
+--- a/templates/admin/login.jinja-html
++++ b/templates/admin/login.jinja-html
+@@ -1,9 +1,9 @@
+ <!DOCTYPE html>
+-<html lang="en">
++<html lang="de">
+ <head>
+     <meta charset="UTF-8">
+     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+-    <title>Login - Birdie Club GmbH</title>
++    <title>Admin Panel - Login</title>
+     <link rel="stylesheet" href="{{ url_for('static', filename='css/admin/login.css') }}">
+     <link rel="shortcut icon" href="{{ url_for('internal.uploads', filename='Logo.png') }}" type="image">
+ </head>
+diff --git a/templates/admin/media-library.jinja-html b/templates/admin/media-library.jinja-html
+index 587e9a7..c02e5d4 100644
+--- a/templates/admin/media-library.jinja-html
++++ b/templates/admin/media-library.jinja-html
+@@ -1,22 +1,19 @@
+ <!DOCTYPE html>
+-<html lang="en">
++<html lang="de">
+ <head>
+     <meta charset="UTF-8">
+     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+-    <title>Media Library</title>
++    <title>Admin Panel - Medienbibliothek</title>
+     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+     <link href="{{ url_for('static', filename='css/admin/media-library.css') }}" rel="stylesheet">
+     <link rel="shortcut icon" href="{{ url_for('internal.uploads', filename='Logo.png') }}" type="image">
+-
+ </head>
+ <body>
+     <div class="main-container">
+         {% include "admin/sidebar.jinja-html" %}
+-
+         <!-- Main Content -->
+         <div class="main-content">
+             <input type="hidden" id="csrf_token" name="csrf_token" value="{{ generate_token() }}">
+-
+             <!-- Toolbar (Sticky) -->
+             <div>
+                 <div class="toolbar">
+@@ -26,10 +23,8 @@
+                         <i class="fa fa-arrow-left" aria-hidden="true"></i>
+                     </button>
+                     <button class="toolbar-btn" onclick="navigateToPath()">Los</button>
+-
+                     <!-- Added Select All Button -->
+                     <button class="toolbar-btn" onclick="selectAllItems()">Alle Auswählen</button>
+-
+                     <div class="toolbar-separator"></div>
+                     <label for="sort-options" class="toolbar-label">Sortieren nach:</label>
+                     <select id="sort-options" class="toolbar-btn">
+@@ -54,10 +49,10 @@
+                     <button class="toolbar-btn" id="copy-btn" onclick="copyPath()">
+                         <i class="fa-solid fa-copy"></i> Kopieren
+                     </button>
+-                    <button class="toolbar-btn" id="paste-btn"  onclick="pastePath()">
++                    <button class="toolbar-btn" id="paste-btn" onclick="pastePath()">
+                         <i class="fa-solid fa-paste"></i> Einfügen
+                     </button>
+-                    <button class="toolbar-btn" id="delete-btn" onclick="deleteFiles()">
++                    <button class="toolbar-btn" id="delete-btn" onclick="return confirm('Bist du sicher, dass du löschen willst? Alle ausgewählten Dateien werden gelöscht!')">
+                         <i class="fa-solid fa-trash"></i> Löschen
+                     </button>
+                     <button class="toolbar-btn" id="edit-btn" onclick="renamePath()">
+@@ -65,8 +60,6 @@
+                     </button>
+                 </div>
+             </div>
+-
+-
+             <!-- Adjusted File Explorer Header for Proper Layout -->
+             <div class="file-explorer-header">
+                 <span class="checkbox-column">Ausw.</span>
+@@ -75,14 +68,11 @@
+                 <span>Art</span>
+                 <span>Größe</span>
+             </div>
+-
+             <div class="file-explorer-list" id="file-list">
+                 <!-- Files will be dynamically generated here -->
+             </div>
+         </div>
+     </div>
+-
+     <script src="{{ url_for('static', filename='js/admin/media-library.js') }}"></script>
+-
+ </body>
+ </html>
+diff --git a/templates/admin/orders.jinja-html b/templates/admin/orders.jinja-html
+index 981b063..269a820 100644
+--- a/templates/admin/orders.jinja-html
++++ b/templates/admin/orders.jinja-html
+@@ -11,35 +11,56 @@
+ 
+         <div class="main-content">
+             <h2>Bestellungen</h2>
+-            <table class="orders-table">
+-                <thead>
+-                    <tr>
+-                        <th>ID</th>
+-                        <th>Email</th>
+-                        <th>Name</th>
+-                        <th>Produkt</th>
+-                        <th>Datum</th>
+-                        <th>Status</th>
+-                        <th>Aktionen</th>
+-                    </tr>
+-                </thead>
+-                <tbody>
+-                    {% for order in orders %}
+-                    <tr>
+-                        <td>{{ order.id }}</td>
+-                        <td>{{ order.email }}</td>
+-                        <td>{{ order.name }}</td>
+-                        <td>{{ order.product }}</td>
+-                        <td>{{ order.date }}</td>
+-                        <td>{{ order.status }}</td>
+-                        <td>
+-                            <a href="{{ url_for('admin.view_order', id=order.id) }}" class="btn edit-btn">Bearbeiten</a>
+-                        </td>
+-                    </tr>
+-                    {% endfor %}
+-                </tbody>
+-            </table>
++            <div class="product-filters">
++                <div class="filter-menu">
++                    <select id="status-filter" onchange="filterOrders()">
++                        <option value="all">Alle Status</option>
++                        <option value="offen">Offen</option>
++                        <option value="in bearbeitung">In Bearbeitung</option>
++                        <option value="geschlossen">Geschlossen</option>
++                    </select>
++                </div>
++                <div class="sort-options">
++                    <select id="sort-options" onchange="sortOrders()">
++                        <option value="default">Sortieren nach</option>
++                        <option value="date-asc">Datum: Alt zu Neu</option>
++                        <option value="date-desc">Datum: Neu zu Alt</option>
++                        <option value="name-asc">Name: A-Z</option>
++                        <option value="name-desc">Name: Z-A</option>
++                        <option value="price-asc">Preis: Niedrig zu Hoch</option>
++                        <option value="price-desc">Preis: Hoch zu Niedrig</option>
++                    </select>
++                </div>
++            </div>
++            <div class="orders-list">
++                {% for order in orders %}
++                    <div class="order-item" data-status="{{ order.status }}" data-date="{{ order.date }}" data-name="{{ order.name }}" data-price="{{ order.total_price }}">
++                        <div class="order-info">
++                            <h3>{{ order.id }}</h3>
++                            <p>{{ order.get("items")|length }} Artikel</p>
++                            <p>{{ order.date }}</p>
++                        </div>
++                        <div class="order-total">
++                            <p>€ {{ order.total_price }}</p>
++                        </div>
++                        <div class="order-status">
++                            {% if order.status == 'offen' %}
++                                <i class="fas fa-times-circle" style="color: red;"></i>
++                            {% elif order.status == 'in bearbeitung' %}
++                                <i class="fas fa-clock" style="color: darkorange;"></i>
++                            {% else %}
++                                <i class="fas fa-check-circle" style="color: green;"></i>
++                            {% endif %}
++                        </div>
++                        <div class="order-actions">
++                            <a href="{{ url_for('admin.view_order', id=order.id) }}" class="btn view-btn"><i class="fas fa-eye"></i></a>
++                            <a href="/api/delete-order?id={{ order.id }}" class="btn delete-btn" onclick="return confirm('Bist du sicher, dass du diese Bestellung löschen möchtest?')"><i class="fas fa-trash-alt"></i></a>
++                        </div>
++                    </div>
++                {% endfor %}
++            </div>
+         </div>
+     </div>
++    <script src="{{ url_for('static', filename='js/admin/orders.js') }}"></script>
+ </body>
+ </html>
+diff --git a/templates/admin/see-logs.jinja-html b/templates/admin/see-logs.jinja-html
+index adfdc44..72837f5 100644
+--- a/templates/admin/see-logs.jinja-html
++++ b/templates/admin/see-logs.jinja-html
+@@ -5,7 +5,7 @@
+     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     <link rel="shortcut icon" href="{{ url_for('internal.uploads', filename='Logo.png') }}" type="image">
+     <link rel="stylesheet" href="{{ url_for('static', filename='css/admin/see-logs.css') }}">
+-    <title>Admin Panel - Birdie Club GmbH</title>
++    <title>Admin Panel - Server Logs Übersicht</title>
+ </head>
+ <body>
+     <div class="main-container">
+diff --git a/templates/admin/server-settings.jinja-html b/templates/admin/server-settings.jinja-html
+index b7cd31b..a3d1ba2 100644
+--- a/templates/admin/server-settings.jinja-html
++++ b/templates/admin/server-settings.jinja-html
+@@ -5,7 +5,7 @@
+     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     <link rel="shortcut icon" href="{{ url_for('internal.uploads', filename='Logo.png') }}" type="image">
+     <link rel="stylesheet" href="{{ url_for('static', filename='css/admin/settings.css') }}">
+-    <title>Admin Panel - Birdie Club GmbH</title>
++    <title>Admin Panel - Servereinstellungen</title>
+ </head>
+ <body>
+     <div class="main-container">
+diff --git a/templates/agb.jinja-html b/templates/agb.jinja-html
+index d1894c6..e186e43 100644
+--- a/templates/agb.jinja-html
++++ b/templates/agb.jinja-html
+@@ -1,9 +1,9 @@
+ <!DOCTYPE html>
+-<html lang="en">
++<html lang="de">
+ <head>
+     <meta charset="UTF-8">
+     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+-    <title>Datenschutzerklärung - Birdie Club GmbH</title>
++    <title>AGB - Birdie Club GmbH</title>
+     <link rel="stylesheet" href="{{ url_for('static', filename='css/root.css') }}">
+     <link rel="shortcut icon" href="{{ url_for('internal.uploads', filename='Logo.png') }}" type="image">
+     
+@@ -62,4 +62,3 @@
+     {% include "snippets/footer.jinja-html" %}
+ </body>
+ </html>
+-    
+\ No newline at end of file
+diff --git a/templates/cart.jinja-html b/templates/cart.jinja-html
+index 4c0cd54..c2a8d53 100644
+--- a/templates/cart.jinja-html
++++ b/templates/cart.jinja-html
+@@ -1,12 +1,11 @@
+ <!DOCTYPE html>
+-<html lang="en">
++<html lang="de">
+ <head>
+     <meta charset="UTF-8">
+     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+-    <title>Cart - Birdie Club GmbH</title>
++    <title>Warenkorb - Birdie Club GmbH</title>
+     <link rel="stylesheet" href="{{ url_for('static', filename='css/cart.css') }}">
+     <link rel="shortcut icon" href="{{ url_for('internal.uploads', filename='Logo.png') }}" type="image">
+-    
+ </head>
+ 
+ <body>
+diff --git a/templates/checkout.jinja-html b/templates/checkout.jinja-html
+index 3669d00..bd15d9c 100644
+--- a/templates/checkout.jinja-html
++++ b/templates/checkout.jinja-html
+@@ -28,7 +28,7 @@
+                     <option value="Firma">Firma</option>
+                     <option value="Divers">Divers</option>
+                 </select>
+-                <label for="name">Anrede</label>
++                <label for="type">Anrede</label>
+             </div>
+             <div class="form-group">
+                 <input type="text" id="name" name="name" placeholder="Max Mustermann / Musterfirma GmbH" required>
+@@ -42,7 +42,7 @@
+ 
+             <div class="form-group">
+                 <input type="tel" id="tel" name="tel" placeholder="+43 123 456 789">
+-                <label for="email">Telefonnummer</label>
++                <label for="tel">Telefonnummer</label>
+             </div>
+ 
+             <div class="form-group">
+@@ -86,7 +86,7 @@
+             
+             <div class="checkbox-group">
+                 <input type="checkbox" name="agb" id="agb" required>
+-                <label for="zip_code">Ich habe die <a href="/rechtliches/agb">AGB</a> gelesen und akzeptiere diese.</label>
++                <label for="agb">Ich habe die <a href="/rechtliches/agb">AGB</a> gelesen und akzeptiere diese.</label>
+             </div>
+ 
+             <!-- Submit Button -->
+diff --git a/templates/checkout_done.jinja-html b/templates/checkout_done.jinja-html
+index f721463..78b0181 100644
+--- a/templates/checkout_done.jinja-html
++++ b/templates/checkout_done.jinja-html
+@@ -7,7 +7,7 @@
+     <meta name="keywords" content="Golf-Equipment, Birdie Club GmbH, Premium-Golf-Schläger, Golf-Trainingsausrüstung, professionelles Golf-Equipment">
+     <meta name="author" content="Birdie Club GmbH">
+     <meta http-equiv="refresh" content="10;url=/" />
+-    <title>Kassa - Birdie Club GmbH</title>
++    <title>Bestellung abgeschlossen - Birdie Club GmbH</title>
+ 
+     <link rel="stylesheet" href="{{ url_for('internal.plugins', filename='carousel/carousel.css') }}">
+     <link rel="shortcut icon" href="{{ url_for('internal.uploads', filename='Logo.png') }}" type="image">
+@@ -29,7 +29,7 @@
+         <h2>Bestellung Aufgegeben</h2>
+ 
+         <p>Vielen Dank für Ihre Bestellung. Ihre Bestellung ist bei uns angekommen und wird in Kürze bearbeitet.</p>
+-        <p>Sie erhalten in Kürze eine E-Mail als Bestätigung.</p><br>
++        <p>Sie erhalten in  eine E-Mail als Bestätigungm sobalf wir Ihre Bestellung bearbeitet haben.</p><br>
+ 
+         <p>Sie werden in 10 Sekunden an die Homepage zurückgeleitet!</p>
+     </div>
+diff --git a/templates/imprint.jinja-html b/templates/imprint.jinja-html
+index 2a1cd3d..2f0305d 100644
+--- a/templates/imprint.jinja-html
++++ b/templates/imprint.jinja-html
+@@ -1,5 +1,5 @@
+ <!DOCTYPE html>
+-<html lang="en">
++<html lang="de">
+ <head>
+     <meta charset="UTF-8">
+     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+diff --git a/templates/index.jinja-html b/templates/index.jinja-html
+index cd88ca0..37e5e1e 100644
+--- a/templates/index.jinja-html
++++ b/templates/index.jinja-html
+@@ -6,7 +6,7 @@
+     <meta name="description" content="Birdie Club GmbH bietet die neueste Technologie im Golf-Equipment für verbesserte Leistung auf dem Platz und beim Training. Entdecken Sie Premiumqualität, fortschrittliche Technologie und individuelle Anpassungen.">
+     <meta name="keywords" content="Golf-Equipment, Birdie Club GmbH, Premium-Golf-Schläger, Golf-Trainingsausrüstung, professionelles Golf-Equipment">
+     <meta name="author" content="Birdie Club GmbH">
+-    <title>Birdie Club GmbH</title>
++    <title>Startseite - Birdie Club GmbH</title>
+     <link rel="stylesheet" href="{{ url_for('internal.plugins', filename='carousel/carousel.css') }}">
+     <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
+     <link rel="shortcut icon" href="{{ url_for('internal.uploads', filename='Logo.png') }}" type="image">
+@@ -113,8 +113,8 @@
+                         </div>
+                     </div>
+                 </div>
+-                <button class="prev-btn" aria-label="Previous">❮</button>
+-                <button class="next-btn" aria-label="Next">❯</button>
++                <button class="prev-btn" aria-label="Vorherige">❮</button>
++                <button class="next-btn" aria-label="Nächste">❯</button>
+             </div>
+         </section>
+         <svg id="contact-svg" viewBox="0 0 800 70" xmlns="http://www.w3.org/2000/svg">
+diff --git a/templates/maintenance.jinja-html b/templates/maintenance.jinja-html
+index ab7320b..53289b3 100644
+--- a/templates/maintenance.jinja-html
++++ b/templates/maintenance.jinja-html
+@@ -5,6 +5,7 @@
+     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     <title>Wartungsmodus - Birdie Club GmbH</title>
+     <link rel="stylesheet" href="{{ url_for('static', filename='css/root.css') }}">
++    <link rel="shortcut icon" href="{{ url_for('internal.uploads', filename='Logo.png') }}" type="image">
+ </head>
+ 
+ <body>
+diff --git a/templates/privacy.jinja-html b/templates/privacy.jinja-html
+index f6ebd41..56b6339 100644
+--- a/templates/privacy.jinja-html
++++ b/templates/privacy.jinja-html
+@@ -1,5 +1,5 @@
+ <!DOCTYPE html>
+-<html lang="en">
++<html lang="de">
+ <head>
+     <meta charset="UTF-8">
+     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+@@ -56,4 +56,3 @@
+     {% include "snippets/footer.jinja-html" %}
+ </body>
+ </html>
+-    
+\ No newline at end of file
+diff --git a/templates/product.jinja-html b/templates/product.jinja-html
+index cfda03e..2b292e4 100644
+--- a/templates/product.jinja-html
++++ b/templates/product.jinja-html
+@@ -1,5 +1,5 @@
+ <!DOCTYPE html>
+-<html lang="en">
++<html lang="de">
+ <head>
+     <meta charset="UTF-8">
+     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+@@ -12,7 +12,7 @@
+     <meta property="product:availability" content="{{ product.availability }}">
+ 
+     <title>{{ product.name }} - Birdie Club GmbH</title>
+-    <link rel="stylesheet" href="{{ url_for('static', filename='css/product.css')}}">
++    <link rel="stylesheet" href="{{ url_for('static', filename='css/product.css') }}">
+     <link rel="shortcut icon" href="{{ url_for('internal.uploads', filename='Logo.png') }}" type="image">
+ </head>
+ <body>
+@@ -64,6 +64,6 @@
+     </div>
+ 
+     {% include "snippets/footer.jinja-html" %}
+-    <script src="{{ url_for('static', filename='js/product.js')}}"></script>
++    <script src="{{ url_for('static', filename='js/product.js') }}"></script>
+ </body>
+ </html>
+diff --git a/templates/products.jinja-html b/templates/products.jinja-html
+index b23d6f0..773e78c 100644
+--- a/templates/products.jinja-html
++++ b/templates/products.jinja-html
+@@ -1,10 +1,10 @@
+ <!DOCTYPE html>
+-<html lang="en">
++<html lang="de">
+ <head>
+     <meta charset="UTF-8">
+     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+-  <title>Birdie Club GmbH</title>
+-  <link rel="stylesheet" href="{{ url_for('static', filename='css/products.css') }}">
++    <title>Produkte - Birdie Club GmbH</title>
++    <link rel="stylesheet" href="{{ url_for('static', filename='css/products.css') }}">
+     <link rel="shortcut icon" href="{{ url_for('internal.uploads', filename='Logo.png') }}" type="image">
+ 
+ </head>
+diff --git a/todo.md b/todo.md
+deleted file mode 100644
+index 5ab2d17..0000000
+--- a/todo.md
++++ /dev/null
+@@ -1,52 +0,0 @@
+-# Aufgabenliste
+-
+-## 1. **"Über uns"-Seite mit Inhalt füllen**
+-   - **Ziel**: Eine ansprechende und informative "Über uns"-Seite erstellen.
+-   - **Details**:
+-     - Beschreibung der Unternehmensvision und -mission.
+-     - Darstellung der Geschichte und Entwicklung des Unternehmens.
+-     - Vorstellung des Teams, optional mit Fotos und kurzen Biografien.
+-     - Einbindung von Social-Media-Links und Kontaktmöglichkeiten.
+-
+-## 2. **Kontaktformular im Backend erreichbar machen**
+-   - **Ziel**: Alle Anfragen, die über das Kontaktformular eingehen, zentral im Backend einsehbar machen.
+-   - **Details**:
+-     - Speicherung aller Formulareingaben in der Datenbank.
+-     - Anzeige der Anfragen in einer übersichtlichen Liste im Admin-Panel.
+-     - Such- und Filtermöglichkeiten für eingegangene Anfragen.
+-     - Option, direkt aus dem Backend auf Anfragen zu antworten oder sie weiterzuleiten.
+-
+-## 3. **Bestellungen im Backend anzeigen**
+-   - **Ziel**: Eine klare Übersicht aller Bestellungen für Admins schaffen.
+-   - **Details**:
+-     - Implementierung einer Bestellübersicht mit folgenden Informationen:
+-       - Bestellnummer
+-       - Kunde (Name, E-Mail, etc.)
+-       - Datum und Uhrzeit der Bestellung
+-       - Status der Bestellung (z. B. „Offen“, „Versendet“, „Abgeschlossen“)
+-     - Möglichkeit zur Bearbeitung des Bestellstatus.
+-     - Export der Bestellungen als CSV/Excel-Datei.
+-
+-## 4. **Custom-CSS-Editor implementieren**
+-   - **Ziel**: Admins ermöglichen, eigene CSS-Anpassungen vorzunehmen.
+-   - **Details**:
+-     - Eingabefeld für benutzerdefiniertes CSS im Admin-Panel.
+-     - Live-Vorschau der Änderungen auf der Website.
+-     - Sicherheitsmechanismen gegen fehlerhaften oder schädlichen Code.
+-     - Speicherfunktion für verschiedene CSS-Versionen (z. B. Versionierung).
+-
+-## 5. **Templates bearbeiten Seite funktional machen**
+-   - **Ziel**: Eine einfach zu bedienende Seite für die Bearbeitung von Templates bereitstellen.
+-   - **Details**:
+-     - Auflistung aller verfügbaren Templates im Admin-Panel.
+-     - WYSIWYG-Editor (What You See Is What You Get) für einfache Anpassungen.
+-     - Möglichkeit, Template-Dateien direkt im HTML-/Code-Format zu bearbeiten.
+-     - Vorschaufunktion für geänderte Templates vor der Veröffentlichung.
+-
+-## 6. **Fehler beheben**
+-   - **Ziel**: Alle bestehenden Bugs im System identifizieren und beheben.
+-   - **Details**:
+-     - Prüfung der bestehenden Fehlerberichte und Logs.
+-     - Behebung von kritischen Fehlern mit Priorität.
+-     - Durchführung von Tests zur Vermeidung neuer Fehler.
+-     - Dokumentation der behobenen Fehler und ihrer Lösungen.
+diff --git a/utility/data_managment.py b/utility/data_managment.py
+index 4dca362..00fa0ac 100644
+--- a/utility/data_managment.py
++++ b/utility/data_managment.py
+@@ -118,6 +118,29 @@ def add_product(product_data: dict):
+         logger.error(f"Error adding product: {e}")
+ 
+ 
++# Modify product by its ID
++def modify_product(product_id: str, updated_data: dict):
++    try:
++        products: list[dict] = get_products()
++        product = get_product_by_id(product_id)
++        if product:
++            product.update(updated_data)
++            with open("data/products.json", "w", encoding="utf-8") as f:
++                json.dump(products, f, indent=4, ensure_ascii=False)
++            logger.info(f"Product with ID {product_id} updated successfully.")
++            # Clear cached data for products
++            get_product_by_id.cache_clear()
++            get_products.cache_clear()
++        else:
++            logger.error(f"Product with ID {product_id} not found.")
++    except FileNotFoundError:
++        logger.critical("products.json file not found.")
++    except json.JSONDecodeError:
++        logger.critical("Invalid JSON in products.json.")
++    except Exception as e:
++        logger.error(f"Error updating product with ID {product_id}: {e}")
++
++
+ # =====================================
+ # Coupons Functions
+ # =====================================
+@@ -203,6 +226,29 @@ def add_coupon(coupon_data: dict):
+         logger.error(f"Error adding coupon: {e}")
+ 
+ 
++# Modify coupon by its ID
++def modify_coupon(coupon_id: str, updated_data: dict):
++    try:
++        coupons: list[dict] = get_coupons()
++        coupon = get_coupon_by_id(coupon_id)
++        if coupon:
++            coupon.update(updated_data)
++            with open("data/coupons.json", "w", encoding="utf-8") as f:
++                json.dump(coupons, f, indent=4, ensure_ascii=False)
++            logger.info(f"Coupon with ID {coupon_id} updated successfully.")
++            # Clear cached data for coupons
++            get_coupon_by_id.cache_clear()
++            get_coupons.cache_clear()
++        else:
++            logger.error(f"Coupon with ID {coupon_id} not found.")
++    except FileNotFoundError:
++        logger.critical("coupons.json file not found.")
++    except json.JSONDecodeError:
++        logger.critical("Invalid JSON in coupons.json.")
++    except Exception as e:
++        logger.error(f"Error updating coupon with ID {coupon_id}: {e}")
++
++
+ # =====================================
+ # Settings Functions
+ # =====================================
+@@ -311,6 +357,29 @@ def add_contact_request(contact_entry: dict):
+         logger.error(f"Error adding contact entry: {e}")
+ 
+ 
++# Modify contact request by its ID
++def modify_contact_request(request_id: str, updated_data: dict):
++    try:
++        contact_requests: list[dict] = get_contact_requests()
++        request = get_contact_by_id(request_id)
++        if request:
++            request.update(updated_data)
++            with open("data/contact.json", "w", encoding="utf-8") as f:
++                json.dump(contact_requests, f, indent=4, ensure_ascii=False)
++            logger.info(f"Contact request with ID {request_id} updated successfully.")
++            # Clear cached data for contact requests
++            get_contact_by_id.cache_clear()
++            get_contact_requests.cache_clear()
++        else:
++            logger.error(f"Contact request with ID {request_id} not found.")
++    except FileNotFoundError:
++        logger.critical("contacts.json file not found.")
++    except json.JSONDecodeError:
++        logger.critical("Invalid JSON in contacts.json.")
++    except Exception as e:
++        logger.error(f"Error updating contact request with ID {request_id}: {e}")
++
++
+ # =====================================
+ # Orders Functions
+ # =====================================
+@@ -390,3 +459,26 @@ def add_order(order_data: dict):
+         logger.error(f"Error adding order: {e}")
+ 
+ 
++# Modify order by its ID
++def modify_order(order_id: str, updated_data: dict):
++    try:
++        orders: list[dict] = get_orders()
++        order = get_order_by_id(order_id)
++        if order:
++            order.update(updated_data)
++            with open("data/orders.json", "w", encoding="utf-8") as f:
++                json.dump(orders, f, indent=4, ensure_ascii=False)
++            logger.info(f"Order with ID {order_id} updated successfully.")
++            # Clear cached data for orders
++            get_order_by_id.cache_clear()
++            get_orders.cache_clear()
++        else:
++            logger.error(f"Order with ID {order_id} not found.")
++    except FileNotFoundError:
++        logger.critical("orders.json file not found.")
++    except json.JSONDecodeError:
++        logger.critical("Invalid JSON in orders.json.")
++    except Exception as e:
++        logger.error(f"Error updating order with ID {order_id}: {e}")
++
++
+diff --git a/utility/email_util.py b/utility/email_util.py
+deleted file mode 100644
+index 3d15880..0000000
+--- a/utility/email_util.py
++++ /dev/null
+@@ -1,189 +0,0 @@
+-import json
+-import re
+-import requests
+-import smtplib
+-from email import encoders
+-from email.mime.base import MIMEBase    
+-from email.mime.multipart import MIMEMultipart
+-from email.mime.text import MIMEText
+-from io import BytesIO
+-
+-from .data_managment import get_settings
+-from logging_utility import logger
+-
+-
+-# =====================================
+-# Email Functions
+-# =====================================
+-
+-# Send an email with optional attachments
+-def send_email(recipients: list[str], bcc: list[str], subject, body, files=None):
+-    mail_settings: dict = get_settings("email_settings")
+-    sender_email = mail_settings.get("address")
+-
+-    try:
+-        # Setup email message
+-        message = MIMEMultipart()
+-        message["From"] = "Birdie Club GmbH"
+-        message["To"] = ", ".join(recipients)
+-        message["Subject"] = subject
+-        message["Bcc"] = ", ".join(bcc)
+-
+-        all_recipients = recipients + bcc
+-        message.attach(MIMEText(body, "html"))
+-
+-        # Attach files if provided
+-        if files is not None:
+-            if isinstance(files, BytesIO):
+-                files.seek(0)
+-                part = MIMEBase("application", "octet-stream")
+-                part.set_payload(files.read())
+-                encoders.encode_base64(part)
+-                part.add_header("Content-Disposition", f"attachment; filename=invoice.pdf")
+-                message.attach(part)
+-
+-        # Send the email
+-        smtp_server = smtplib.SMTP(mail_settings.get("smtp-server", mail_settings.get("smtp-port")))
+-        smtp_server.starttls()
+-        smtp_server.login(sender_email, mail_settings.get("password"))
+-        smtp_server.sendmail(sender_email, all_recipients, message.as_string())
+-        smtp_server.quit()
+-
+-        logger.info(f"Successfully sent an email to '{sender_email}' with the subject '{subject}'")
+-
+-    except Exception as e:
+-        logger.error(f"Error occurred while sending email: {e}")
+-        print(f"Error occurred: {e}")
+-
+-def send_http_email(recipients: list[str], subject, body, files=None, bcc: list[str] = None):
+-    pass
+-
+-
+-
+-# =====================================
+-# Markdown to HTML Conversion Functions
+-# =====================================
+-
+-# Convert markdown text to HTML format
+-def convert_markdown_to_html(markdown_text: str) -> str:
+-    try:
+-        translation_table = str.maketrans({
+-            "&": "&amp;",
+-            "<": "&lt;",
+-            ">": "&gt;",
+-        })
+-        
+-        patterns = [
+-            (re.compile(r'\*\*\*(.+?)\*\*\*'), r'<strong><em>\1</em></strong>'),
+-            (re.compile(r'\*\*(.+?)\*\*'), r'<strong>\1</strong>'),          
+-            (re.compile(r'\*(.+?)\*'), r'<em>\1</em>'),                        
+-            (re.compile(r'~~(.+?)~~'), r'<s>\1</s>'),                         
+-            (re.compile(r'_(.+?)_'), r'<u>\1</u>'),                               
+-            (re.compile(r'\{color:(#[0-9a-fA-F]{3,6})\}(.*?)\{\/color\}', re.DOTALL), r'<span style="color:\1">\2</span>'),
+-            (re.compile(r'\{align:([a-z]*)\}(.*?)\{\/align\}', re.DOTALL), r'<span style="display: block; text-align:\1">\2</span>'),
+-            (re.compile(r'\[(.+?)\]\((.+?)\)'), r'<a href="\2">\1</a>'),        
+-            (re.compile(r'`(.+?)`'), r'<code>\1</code>')
+-        ]
+-
+-        html_output_list: list = []
+-
+-        line_iter = iter(markdown_text.splitlines())
+-
+-        in_codeblock = False
+-        in_list = False
+-        in_blockquote = False
+-        in_html = False
+-
+-        # Process each line of markdown text
+-        for line in line_iter:
+-            if line.strip().startswith(r"{html}"):
+-                in_html = True
+-                continue
+-            if line.strip().startswith(r"{/html}"):
+-                in_html = False
+-                continue
+-            
+-            if in_html:
+-                html_output_list.append(line)
+-                continue
+-
+-            # Handle code blocks
+-            if line.strip().startswith('```'):
+-                if in_codeblock:
+-                    html_output_list.append('</pre>')
+-                    in_codeblock = False
+-                else:
+-                    html_output_list.append('<pre>')
+-                    in_codeblock = True
+-                continue
+-
+-            if in_codeblock:
+-                line = line.translate(translation_table)
+-                html_output_list.append(line)
+-                continue
+-
+-            if in_list and not line.strip().startswith('- '):
+-                html_output_list.append('</ul>')
+-                in_list = False
+-            
+-            if in_blockquote and not line.strip().startswith('> '):
+-                html_output_list.append('</blockquote>')
+-                in_blockquote = False
+-
+-            # Apply markdown patterns to the current line
+-            for pattern, replacement in patterns:
+-                line = pattern.sub(replacement, line)
+-
+-            # Handle empty lines
+-            if line.strip() == "":
+-                html_output_list.append("<br>")
+-                continue
+-
+-            # Handle headers
+-            if line.strip().startswith('#'):
+-                header_level = len(re.match(r'#+', line).group(0))
+-                header_content = line[header_level:].strip()
+-                html_output_list.append(f'<h{header_level}>{header_content}</h{header_level}>')
+-                continue
+-
+-            # Handle horizontal rules
+-            if line.strip().startswith("---"):
+-                html_output_list.append("<hr>")
+-                continue
+-
+-            # Handle unordered lists
+-            if line.strip().startswith('- '):
+-                if not in_list:
+-                    in_list = True
+-                    html_output_list.append('<ul>')
+-                html_output_list.append(f'\t<li>{line[2:].strip()}</li>')
+-                continue
+-
+-            # Handle blockquotes
+-            if line.strip().startswith('> '):
+-                if not in_blockquote:
+-                    in_blockquote = True
+-                    html_output_list.append('<blockquote>')
+-                html_output_list.append(line[2:].strip())
+-                continue
+-
+-            # Handle paragraphs (default case)
+-            html_output_list.append(f'<p>{line.strip()}</p>')
+-
+-        # Close any open tags
+-        if in_list:
+-            html_output_list.append('</ul>')
+-        if in_blockquote:
+-            html_output_list.append('</blockquote>')
+-        if in_codeblock:
+-            html_output_list.append('</pre>')
+-
+-        # Join the HTML output into a single string
+-        html_output: str = "\n".join(html_output_list)
+-
+-        logger.info("Markdown successfully converted to HTML.")
+-        return html_output
+-
+-    except Exception as e:
+-        logger.error(f"Error converting markdown to HTML: {e}")
+-        return markdown_text
+diff --git a/utility/file_util.py b/utility/file_util.py
+index 55366a7..b34b572 100644
+--- a/utility/file_util.py
++++ b/utility/file_util.py
+@@ -1,4 +1,12 @@
+ import json
++from datetime import datetime, timedelta
++from io import BytesIO
++from reportlab.lib.pagesizes import A4
++from reportlab.pdfgen import canvas
++from reportlab.pdfbase.ttfonts import TTFont
++from reportlab.pdfbase import pdfmetrics
++from reportlab.lib import colors
++from textwrap import wrap
+ 
+ def sanitize_path(path: str) -> str:
+     path = path.replace("\\", "/")
+@@ -15,4 +23,126 @@ def is_valid_json(file):
+             file.seek(0)
+             return True
+         except Exception:
+-            return False
+\ No newline at end of file
++            return False
++
++def create_invoice_pdf(order):
++    pdf_buffer = BytesIO()
++    c = canvas.Canvas(pdf_buffer, pagesize=A4)
++    pdfmetrics.registerFont(TTFont("Helvetica", "Helvetica.ttf"))
++    pdfmetrics.registerFont(TTFont("Helvetica-Bold", "Helvetica-Bold.ttf"))
++
++    main_color = colors.HexColor("#326442")
++
++    logo_path = "uploads/Logo.jpg"
++    c.drawImage(logo_path, 30, 750, height=70, width=150)
++    c.setStrokeColor(main_color)
++    c.setLineWidth(2)
++    c.line(30, 745, 580, 745)
++
++    c.setFont("Helvetica-Bold", 18)
++    c.setFillColor(main_color)
++    c.drawString(460, 750, "RECHNUNG")
++
++    c.setFont("Helvetica", 10)
++    c.setFillColor(colors.black)
++    c.drawString(400, 680, f"Datum: {order['date']}")
++    c.drawString(400, 665, f"Rechnung Nr.: {order['id']}")
++    c.drawString(400, 650, f"Fällig: {(datetime.strptime(order['date'], '%d.%m.%Y') + timedelta(days=7)).strftime('%d.%m.%Y')}")
++
++    c.setFont("Helvetica-Bold", 11)
++    c.setFillColor(main_color)
++    c.drawString(100, 680, "Rechnungsempfänger:")
++    c.setFont("Helvetica", 10)
++    c.setFillColor(colors.black)
++    c.drawString(100, 665, f"{order['name']}")
++    c.drawString(100, 650, f"{order['address']}")
++    c.drawString(100, 635, f"{order['zip_code']} {order['city']}")
++    c.drawString(100, 620, f"{order['country']}")
++
++    c.setFillColor(main_color)
++    c.setFont("Helvetica-Bold", 11)
++    c.drawString(50, 580, "Nr.")
++    c.drawString(90, 580, "Artikelbezeichnung")
++    c.drawString(230, 580, "Menge")
++    c.drawString(290, 580, "Preis/Stk.")
++    c.drawString(370, 580, "USt. %")
++    c.drawString(430, 580, "USt. Betrag")
++    c.drawString(510, 580, "Betrag")
++    c.setLineWidth(1)
++    c.line(30, 575, 580, 575)
++
++    y_position = 560
++    for pos, item in enumerate(order['items'], start=1):
++        c.setFont("Helvetica", 10)
++        c.setFillColor(colors.black)
++        c.drawString(50, y_position, str(pos))
++        c.drawString(240, y_position, str(item['quantity']))
++        c.drawString(290, y_position, f"€ {item['unit_price']:,.2f}")
++        c.drawString(375, y_position, f"{int(item['tax_rate'] * 100)}%")
++        c.drawString(430, y_position, f"€ {item['unit_price']*item['tax_rate']*item['quantity']:,.2f}")
++        c.drawString(510, y_position, f"€ {item['total']:,.2f}")
++
++        item_name_wrapped = wrap(item["name"], width=25)
++
++        for line in item_name_wrapped:
++            c.drawString(90, y_position, line)
++            y_position -= 12
++            
++        c.setLineWidth(0.5)
++        c.line(30, y_position, 580, y_position)
++        y_position -= 15
++
++    y_position -= 40
++    c.setLineWidth(1)
++
++    c.setFont("Helvetica-Bold", 10)
++    c.drawString(350, y_position, "Zwischensumme:")
++    c.drawString(480, y_position, f"€ {order['old_total']:,.2f}")
++    y_position -= 15
++    c.drawString(350, y_position, "Rabatt:")
++    c.drawString(480, y_position, f"€ {round(order['discount'], 2):,.2f}")
++    y_position -= 5
++    c.line(350, y_position, 550, y_position)
++    y_position -= 15
++    c.drawString(350, y_position, "Enpreis:")
++    c.drawString(480, y_position, f"€ {round(order['total_price']/1.2, 2):,.2f}")
++    y_position -= 15
++    c.drawString(350, y_position, "inkl. 20% USt.:")
++    c.drawString(480, y_position, f"€ {order['total_tax']:,.2f}")
++    y_position -= 15
++    c.drawString(350, y_position, "Nettobetrag:")
++    c.drawString(480, y_position, f"€ {round(order['total_price']/1.2, 2):,.2f}")
++    y_position -= 5
++    c.line(350, y_position, 550, y_position)
++    y_position -= 15
++    c.setFont("Helvetica-Bold", 14)
++    c.drawString(350, y_position, "Gesamtbetrag:")
++    c.drawString(480, y_position, f"€ {order['total_price']:,.2f}")
++
++    y_position = 150
++    c.setFont("Helvetica-Bold", 10)
++    c.setFillColor(main_color)
++    c.drawString(30, y_position, "Zahlungsbedingungen:")
++
++    c.setFont("Helvetica", 9)
++    c.setFillColor(colors.black)
++    c.drawString(30, y_position - 10, "Bitte überweisen Sie den fälligen Gesamtbetrag bis spätestens 7 Tage nach Erhalt der Rechnung")
++    c.drawString(30, y_position - 20, "auf folgendes Konto: ATXX XXX XXXX XXXX. Zahlungsreferenz: FFFFFFFFFFFFFFFFFFFFFFFFFFFFf",)
++
++    y_position -= 50
++    c.setLineWidth(10)
++    c.line(30, y_position, 580, y_position)
++    c.setFillColor(colors.black)
++    c.setFont("Helvetica", 9)
++    y_position -= 15
++    c.drawString(50, y_position, "Birdie Club GmbH")
++    c.drawString(50, y_position - 10, "Polgarstraße 24")
++    c.drawString(50, y_position - 20, "1220 Wien")
++    c.drawString(50, y_position - 30, "Österreich")
++    c.drawString(350, y_position, "Kontaktinformation:")
++    c.drawString(350, y_position - 10, "E-Mail: birdie2943@uebungsfirmen.at")
++    c.drawString(350, y_position - 20, "Website: http://")
++
++    c.save()
++    pdf_buffer.seek(0)
++    return pdf_buffer
+\ No newline at end of file

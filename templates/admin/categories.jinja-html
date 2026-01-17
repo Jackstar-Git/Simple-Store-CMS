@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="{{ url_for('internal.uploads', filename='Logo.png') }}" type="image">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/admin/categories.css') }}">
+    <title>Admin Panel - Kategorien</title>
+</head>
+<body>
+    <div class="main-container">
+        {% include "admin/sidebar.jinja-html" %}
+
+        <div class="main-content">
+            <h2>Übersicht Kategorien</h2>
+
+            <form class="categories-list"  method="post" action="/admin/produkte/kategorien">
+                <div class="categories-wrapper">
+                    <input type="hidden" id="csrf_token" name="csrf_token" value="{{ generate_token() }}">
+                    {% for category in categories %}
+                        <div class="category-item">
+                            <input type="text" name="category" value="{{category}}">
+
+                            <div class="category-actions">
+                                <!-- View Button -->
+                                <a href="/produkte?category={{category}}" target="_blank" rel="noopener noreferrer" class="btn view-btn"><i class="fas fa-eye"></i></a>
+
+                                <!-- Delete Button -->
+                                <a class="btn delete-btn" onclick="return confirm('Bist du sicher, dass du diese Kategorie löschen möchtest?')"><i class="fas fa-trash-alt"></i></a>
+                            </div>
+                        </div>
+                    {% else %}
+                        <p>Keine Produkte gefunden.</p>
+                    {% endfor %}
+                </div>
+                <button id="add-btn" class="btn"><i class="fa-solid fa-plus"></i> Hinzufügen</button>
+                <button type="submit" class="btn save-btn"><i class="fa-solid fa-floppy-disk"></i> Speichern</button>
+            </form>
+
+        </div>
+    </div>
+    <script src="{{ url_for('static', filename='js/admin/categories.js') }}"></script>
+</body>
+</html>

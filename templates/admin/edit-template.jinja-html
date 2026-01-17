@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel - Template bearbeiten</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <link href="{{ url_for('static', filename='css/admin/edit-template.css') }}" rel="stylesheet">
+    <link rel="shortcut icon" href="{{ url_for('internal.uploads', filename='Logo.png') }}" type="image">
+</head>
+<body>
+    <div class="main-container">
+        {% include "admin/sidebar.jinja-html" %}
+        <div class="main-content">
+            <a href="/admin/aussehen/templates" class="back-button">
+                <i class="fas fa-arrow-left"></i> Zurück
+            </a>
+            <h2>Template bearbeiten</h2>
+            <form method="POST">
+                <input type="hidden" id="csrf_token" name="csrf_token" value="{{ generate_token() }}">
+                <textarea name="template_content" rows="20" cols="100">{{ template_content|safe }}</textarea>
+                <br>
+                <button type="submit">Speichern</button>
+                <a href="/admin/aussehen/templates" class="cancel-button" onclick="return confirm('Bist du sicher, dass du abbrechen willst? Alle Änderungen gehen dabei verloren!')">
+                    <i class="fas fa-times"></i> Abbrechen
+                </a>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

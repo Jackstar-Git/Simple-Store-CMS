@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Über uns - Birdie Club GmbH</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/about.css') }}"> 
+    <link rel="stylesheet" href="{{ url_for('internal.plugins', filename='carousel/carousel.css') }}"> 
+    <link rel="shortcut icon" href="{{ url_for('internal.uploads', filename='Logo.png') }}" type="image">
+
+</head>
+<body>
+    {% include "snippets/navbar.jinja-html" %}
+    <section class="about-section">
+        <h2>Über uns</h2>
+        <p>Willkommen bei der Birdie Club GmbH! Als innovative Golf-Firma, die von Schülern geführt wird, bieten wir nicht nur hochwertige Golfausrüstung und Trainings, sondern auch spannende Einblicke in die Welt der Unternehmensführung. Unsere GmbH ist Teil des Schulfachs „Übungsfirmen“, in dem Schüler praxisnah lernen, ein Unternehmen zu leiten und zu betreiben. Mit Begeisterung und Engagement setzen wir uns dafür ein, das Golferlebnis zu optimieren und unsere Ideen in die Realität umzusetzen. Besuchen Sie uns in der Polgastraße 24 und entdecken Sie eine neue Generation von Golf-Experten. Wir freuen uns auf Ihren Besuch im Birdie Club!</p>
+    </section>
+
+
+    <section class="video-section">
+        <h2>Ein Blick hinter die Kulissen</h2>
+        <video controls align="center" max-height="400px" height="400px">
+            <source src="{{ url_for('internal.uploads', filename='videos/Werbevideo Birdie.mp4') }}" type="video/mp4">
+            Ihr Browser unterstützt dieses Videoformat nicht.
+        </video>
+    </section>
+
+    {% include "snippets/footer.jinja-html" %}
+    <script src="{{ url_for('internal.plugins', filename='carousel/Carousel.js')}}"></script>
+</body>
+</html>

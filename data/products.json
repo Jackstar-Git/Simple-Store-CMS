@@ -1,0 +1,152 @@
+[
+    {
+        "id": "1",
+        "name": "Mizuno Driver ST-G",
+        "price": 599.99,
+        "thumbnail": "products/1/1.png",
+        "amount": 20,
+        "images": [
+            "products/1/2.png",
+            "products/1/3.png"
+        ],
+        "featured": true,
+        "new_price": 0.0,
+        "description": "<p>Beschreibung: Geeignet für Herren, liegt gut in der Hand, für Rechtshänder, Loft: 9.5, Schaft: Graphit, Schaftbezeichung + Gewicht: Mitsubishi Chemical Kai'li' Blue 60g</p>\n<ul>\n\t<li>Modernes Player-Profil: Tieferes Face, kürzer von vorne nach hinten, aber mit voller Kopfgröße von 460 ccm</li>\n\t<li>Neues, Multistarkes Cortech-Face: Verfeinert für höhere Ballgeschwindigkeit bei Schlägen tief auf der Schlagfläche</li>\n\t<li>Neuer doppelter mittlerer Gewichtsschlitz: Für tiefen Schwerpunkt, höhere Stabilität, Start und Spin</li>\n\t<li>Größerer Draw/Fade Bias: Verbesserte seitliche Gewichtstrennung.</li>\n\t<li>Solides Feedback: Engerer Bereich für Gefühl und Sound in allen Gewichtseinstellungen.</li>\n\t<li>Quick Switch Einstellung: 4 Grad Loft-Anpassung für Flugbahn und Optik.</li>\n\t<li>Optimierte Wave-Sole: Trägt zur Ballgeschwindigkeit über die gesamte Schlagfläche bei.</li>\n</ul>",
+        "categories": [
+            "Golfschläger"
+        ],
+        "tax": 20.0,
+        "availability": "Auf Lager",
+        "keyword": "Golfschläger",
+        "raw_description": "Beschreibung: Geeignet für Herren, liegt gut in der Hand, für Rechtshänder, Loft: 9.5, Schaft: Graphit, Schaftbezeichung + Gewicht: Mitsubishi Chemical Kai'li' Blue 60g\r\n- Modernes Player-Profil: Tieferes Face, kürzer von vorne nach hinten, aber mit voller Kopfgröße von 460 ccm\r\n- Neues, Multistarkes Cortech-Face: Verfeinert für höhere Ballgeschwindigkeit bei Schlägen tief auf der Schlagfläche\r\n- Neuer doppelter mittlerer Gewichtsschlitz: Für tiefen Schwerpunkt, höhere Stabilität, Start und Spin\r\n- Größerer Draw/Fade Bias: Verbesserte seitliche Gewichtstrennung.\r\n- Solides Feedback: Engerer Bereich für Gefühl und Sound in allen Gewichtseinstellungen.\r\n- Quick Switch Einstellung: 4 Grad Loft-Anpassung für Flugbahn und Optik.\r\n- Optimierte Wave-Sole: Trägt zur Ballgeschwindigkeit über die gesamte Schlagfläche bei.\r\n"
+    },
+    {
+        "id": "2",
+        "name": "Mizuno JPX 923 Hot Metal Eisensatz",
+        "price": 949.99,
+        "thumbnail": "products/2/1.png",
+        "amount": 15,
+        "images": [
+            "products/2/2.png"
+        ],
+        "featured": false,
+        "new_price": 0.0,
+        "description": "<p>Beschreibung: Geeignet für Damen, Flex: Damen, Schaft: Stahl, Schaftbezeichnung + Gewicht: UST Recoil ESX 460 F3, Eisen: 5-PW, Ausführung: +0,5“ +2°\\n\\n- Hohe Fehlerverzeihung: Gut für Anfänger, fördert hohe und gerade Schläge.\\n- Erhöhte Stoppkraft: Die Cup-Face-Konstruktion liefert einen tiefen Schwerpunkt für kontrollierbaren Landewinkel.\\n- Konstante Ballgeschwindigkeiten: Die Sohle ist um 18% breiter für gleichbleibende Ballgeschwindigkeiten über die Schlagfläche.\\n- White-Satin-Brush: Nicht-reflektierende, verchromte Oberfläche zur Vermeidung von Blendungen.</p>",
+        "categories": [
+            "Golfschläger"
+        ],
+        "tax": 20.0,
+        "availability": "Auf Lager",
+        "keyword": "Golfschläger",
+        "raw_description": "Beschreibung: Geeignet für Damen, Flex: Damen, Schaft: Stahl, Schaftbezeichnung + Gewicht: UST Recoil ESX 460 F3, Eisen: 5-PW, Ausführung: +0,5“ +2°\\n\\n- Hohe Fehlerverzeihung: Gut für Anfänger, fördert hohe und gerade Schläge.\\n- Erhöhte Stoppkraft: Die Cup-Face-Konstruktion liefert einen tiefen Schwerpunkt für kontrollierbaren Landewinkel.\\n- Konstante Ballgeschwindigkeiten: Die Sohle ist um 18% breiter für gleichbleibende Ballgeschwindigkeiten über die Schlagfläche.\\n- White-Satin-Brush: Nicht-reflektierende, verchromte Oberfläche zur Vermeidung von Blendungen.\r\n"
+    },
+    {
+        "id": "3",
+        "name": "Titleist Pro V1 High Numbers 2023 - 12er Pack, weiß",
+        "price": 69.99,
+        "thumbnail": "products/3/1.png",
+        "amount": 30,
+        "images": [
+            "products/3/2.png",
+            "products/3/3.png"
+        ],
+        "featured": false,
+        "new_price": 0.0,
+        "description": "<p><span style=\"color:#b71f1f\">Farbe weiß<strong>, Identifikationsnummer 7, insgesamt 12 Stück.</strong></span></p>",
+        "categories": [
+            "Golfbälle"
+        ],
+        "tax": 20.0,
+        "availability": "Auf Lager",
+        "keyword": "Golfbälle",
+        "raw_description": "{color:#b71f1f}Farbe weiß**, Identifikationsnummer 7, insgesamt 12 Stück.**{/color}"
+    },
+    {
+        "id": "4",
+        "name": "Titleist Tour Soft 2022 Golfbälle - 12er Pack, gelb",
+        "price": 35.0,
+        "thumbnail": "products/4/1.png",
+        "amount": 25,
+        "images": [
+            "products/4/2.png",
+            "products/4/3.png"
+        ],
+        "featured": false,
+        "new_price": 0.0,
+        "description": "<p>Farbe gelb, Identifikationsnummer 1, insgesamt 12 Stück.</p>",
+        "categories": [
+            "Golfbälle"
+        ],
+        "tax": 20.0,
+        "availability": "Auf Lager",
+        "keyword": "Golfbälle",
+        "raw_description": "Farbe gelb, Identifikationsnummer 1, insgesamt 12 Stück."
+    },
+    {
+        "id": "5",
+        "name": "Sun Mountain Standbag H2NO 14, weiß/beige",
+        "price": 449.99,
+        "thumbnail": "products/5/1.png",
+        "amount": 10,
+        "images": [
+            "products/5/2.png",
+            "products/5/3.png",
+            "products/5/4.png"
+        ],
+        "featured": true,
+        "new_price": 399.99,
+        "description": "<p>Trolley, Unisex, Farben: weiß & beige\\n\\n- Wasserdichte Materialien und getapte Nähte schützen das Equipment bei Regen.\\n- 14-fach unterteiltes Divider-TOP mit EXTRA-komfortablem Handgriff.\\n- Stabilität: Befestigung des Standsystems am Top.\\n- Rutschfeste Standfüße mit einfacher Aktivierung.\\n- E-Z Dual-Lite Gurt System für optimale Balance und Tragekomfort.\\n- Viel Stauraum mit 6 Accessoires-Fächern, darunter ein gepolstertes Wertsachenfach.</p>",
+        "categories": [
+            "Golftaschen"
+        ],
+        "tax": 20.0,
+        "availability": "Auf Lager",
+        "keyword": "Golftaschen",
+        "raw_description": "Trolley, Unisex, Farben: weiß & beige\\n\\n- Wasserdichte Materialien und getapte Nähte schützen das Equipment bei Regen.\\n- 14-fach unterteiltes Divider-TOP mit EXTRA-komfortablem Handgriff.\\n- Stabilität: Befestigung des Standsystems am Top.\\n- Rutschfeste Standfüße mit einfacher Aktivierung.\\n- E-Z Dual-Lite Gurt System für optimale Balance und Tragekomfort.\\n- Viel Stauraum mit 6 Accessoires-Fächern, darunter ein gepolstertes Wertsachenfach.\r\n"
+    },
+    {
+        "id": "6",
+        "name": "BIG MAX Cartbag Silencio 2 Dri Lite, navy/pink",
+        "price": 280.0,
+        "thumbnail": "products/6/1.png",
+        "amount": 5,
+        "images": [
+            "products/6/2.png",
+            "products/6/3.png"
+        ],
+        "featured": false,
+        "new_price": 0.0,
+        "description": "<p>Farben pink & schwarz, Trolley-kompatibel\\n\\n- 14-fach unterteiltes Top, hält jeden Schläger an seinem Platz.\\n- 11 Reißverschlussfächer bieten reichlich Stauraum, inklusive Fleece-Wertsachenfächer und extragroßes Kühlfach.\\n- Regenhaubenfach und zusätzliche Regenschirmhalterungen.\\n- Trageriemen und Griffe für einfache Handhabung, auch abseits des Trolleys.</p>",
+        "categories": [
+            "Golftaschen"
+        ],
+        "tax": 20.0,
+        "availability": "Auf Lager",
+        "keyword": "Golftaschen",
+        "raw_description": "Farben pink & schwarz, Trolley-kompatibel\\n\\n- 14-fach unterteiltes Top, hält jeden Schläger an seinem Platz.\\n- 11 Reißverschlussfächer bieten reichlich Stauraum, inklusive Fleece-Wertsachenfächer und extragroßes Kühlfach.\\n- Regenhaubenfach und zusätzliche Regenschirmhalterungen.\\n- Trageriemen und Griffe für einfache Handhabung, auch abseits des Trolleys.\r\n"
+    },
+    {
+        "id": "7",
+        "name": "GSK ELITE Uneekor QED Golf Simulator",
+        "price": 27499.99,
+        "thumbnail": "products/7/3.png",
+        "amount": 1,
+        "images": [
+            "products/7/1.png",
+            "products/7/2.png",
+            ""
+        ],
+        "featured": true,
+        "new_price": 24999.99,
+        "raw_description": "GSK UNEEKOR QED - GOLF SIMULATOR EDITION\r\nWir (GSK) sind der Distributor für UNEEKOR  in Europa\r\nQED bietet Ihnen volle BALLSPIN und Schlägerkopf Messung zu einem sensationellen Preis!\r\nHI SPEED CAMERA SYSTEM MIT DEM GOLF BALL TRACKING SYSTEM VON UNEEKOR QED GOLF\r\nDas GSK Uneekor QED System eignet sich für Indoor Golf Centern, Deluxe Homes die statt einem Sensor Board, lieber auf Hi Speed Kameras setzen wollen.\r\nUneekor QED Ceiling Dual Camera System mit 3000 Frames per Second / Bildern pro Sekunde\r\nHi**gh** Speed Kamera Ball Tracking System 3000 FPS\r\n",
+        "description": "<p>GSK UNEEKOR QED - GOLF SIMULATOR EDITION</p>\n<p>Wir (GSK) sind der Distributor für UNEEKOR  in Europa</p>\n<p>QED bietet Ihnen volle BALLSPIN und Schlägerkopf Messung zu einem sensationellen Preis!</p>\n<p>HI SPEED CAMERA SYSTEM MIT DEM GOLF BALL TRACKING SYSTEM VON UNEEKOR QED GOLF</p>\n<p>Das GSK Uneekor QED System eignet sich für Indoor Golf Centern, Deluxe Homes die statt einem Sensor Board, lieber auf Hi Speed Kameras setzen wollen.</p>\n<p>Uneekor QED Ceiling Dual Camera System mit 3000 Frames per Second / Bildern pro Sekunde</p>\n<p>Hi<strong>gh</strong> Speed Kamera Ball Tracking System 3000 FPS</p>",
+        "categories": [
+            "Golfschläger",
+            "Golfbälle",
+            "Simulator"
+        ],
+        "tax": 20.0,
+        "availability": "Auf Lager",
+        "keyword": "Golfsimulator"
+    }
+]

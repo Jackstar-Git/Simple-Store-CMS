@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="{{ url_for('internal.uploads', filename='Logo.png') }}" type="image">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/admin/edit-product.css') }}">
+    <title>Admin Panel - Produkt erstellen</title>
+</head>
+<body>
+    <div class="main-container">
+        {% include "admin/sidebar.jinja-html" %}
+
+        <div class="main-content">
+            <h2>Produkt erstellen</h2>
+
+            <form method="POST" enctype="multipart/form-data" class="edit-product-form">
+                <input type="hidden" id="csrf_token" name="csrf_token" value="{{ generate_token() }}">
+                <div class="form-group">
+                    <label for="id">Produkt-ID: (kann später nicht geändert werden)</label>
+                    <input type="text" id="id" name="id" required>
+                </div>
+                <div class="form-group">
+                    <label for="name">Produktname:</label>
+                    <input type="text" id="name" name="name" required>
+                </div>
+                <div class="form-group">
+                    <label for="price">Preis (€):</label>
+                    <input type="number" step="0.01" id="price" name="price" required>
+                </div>
+                <div class="form-group">
+                    <label for="new_price">Neuer Preis (optional):</label>
+                    <input type="number" step="0.01" id="new_price" name="new_price">
+                </div>
+                <div class="form-group">
+                    <label for="thumbnail">Thumbnail hochladen:</label>
+                    <input type="file" id="thumbnail-upload" name="thumbnail" required>
+                    <div id="thumbnail-preview">
+                    </div>
+                </div>
+                                <div class="form-group">
+                    <label for="images">Produktbilder (Bildpfade eingeben):</label>
+                    <div class="image-input-list">
+                        <div class="image-path-wrapper">
+                            <input name="images[]" type="text" class="image-path-input" placeholder="Bildpfad eingeben">
+                            <a class="delete-image"><i class="fas fa-trash-alt"></i></a>
+                        </div>
+                    </div>
+                    <button type="button" id="add-image">Bild hinzufügen</button>
+                </div>
+                <div class="form-group">
+                    <label for="content">Beschreibung: </label>
+                    <div class="toolbar">
+                        <button type="button" onclick="applyStyle('bold')" title="Bold"><i class="fas fa-bold"></i></button>
+                        <button type="button" onclick="applyStyle('italic')" title="Italic"><i class="fas fa-italic"></i></button>
+                        <button type="button" onclick="applyStyle('underline')" title="Underline"><i class="fas fa-underline"></i></button>
+                        <button type="button" onclick="applyStyle('strikethrough')" title="Strikethrough"><i class="fas fa-strikethrough"></i></button>
+                        <button type="button" onclick="applyLineStyle('blockquote')" title="Blockquote"><i class="fas fa-quote-left"></i></button>
+                        <button type="button" onclick="applyLineStyle('unordered')" title="Unordered List"><i class="fas fa-list-ul"></i></button>
+                        <button type="button" onclick="applyLineStyle('codeblock')" title="Codeblock"><i class="fas fa-code"></i></button>
+                        <button type="button" onclick="applyStyle('inlinecode')" title="Inline Code"><i class="fas fa-terminal"></i></button>
+                        <button type="button" onclick="applyLineStyle('html')" title="HTML-Block"><i class="fa-brands fa-html5"></i></button>
+                        <button type="button" onclick="textAlign('start')" title="Text Align Start"><i class="fas fa-align-left"></i></button>
+                        <button type="button" onclick="textAlign('end')" title="Text Align End"><i class="fas fa-align-right"></i></button>
+                        <button type="button" onclick="textAlign('justify')" title="Text Align Justify"><i class="fas fa-align-justify"></i></button>
+                        <button type="button" onclick="textAlign('center')" title="Text Align Center"><i class="fas fa-align-center"></i></button>
+
+                        <label id="color-picker">
+                            <input type="color" id="color-picker-input" onchange="changeColor()" title="Text Color">
+                        </label>
+
+                        <select id="heading-dropdown" onchange="applyHeading(this.value)">
+                            <option value="h1">H1</option>
+                            <option value="h2">H2</option>
+                            <option value="h3">H3</option>
+                        </select>
+                        <button type="button" onclick="addLink()" title="Add Link"><i class="fas fa-link"></i></button>
+
+                        <button class="toggle-view-button" id="toggle-view-button" type="button" onclick="toggleView()" title="View Source/Output">
+                            <i class="fas fa-eye"></i>
+                            Ansicht wechseln
+                        </button>
+                    </div>
+                    <textarea id="content" name="content" required></textarea>
+                    <div id="output"></div>
+                </div>
+                <div class="form-group">
+                    <label for="categories">Kategorien:</label>
+                    <select id="categories" name="categories" multiple required>
+                        {% for category in get_settings("categories") %}
+                            <option value="{{ category }}">{{ category }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="new_price">Keyword (Suchbegriff):</label>
+                    <input type="text" id="keyword" name="keyword" required>
+                </div>
+                <div class="form-group">
+                    <label for="featured" style="display: inline-block;">Markiert als Featured:</label>
+                    <input type="checkbox" id="featured" name="featured" style="display: inline-block;">
+                </div>
+                <div class="form-group">
+                    <label for="tax">Mehrwertsteuer (%) :</label>
+                    <input type="number" id="tax" name="tax" step="0.01" required>
+                </div>
+                <div class="form-group">
+                    <label for="availability">Verfügbarkeit:</label>
+                    <select id="availability" name="availability" required>
+                        <option value="Auf Lager" >Auf Lager</option>
+                        <option value="Nicht verfügbar">Nicht verfügbar</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="amount">Menge:</label>
+                    <input type="number" id="amount" name="amount" required>
+                </div>
+                <div class="form-actions">
+                    <button type="submit" class="btn submit-btn">Speichern</button>
+                    <a href="/admin/produkte/alle" class="btn cancel-btn" onclick="return confirm('Bist du sicher, dass du abbrechen willst? Alle Änderungen gehen dabei verloren!')">Abbrechen</a>
+                </div>
+            </form>
+        </div>
+    </div>
+    <script src="{{ url_for('static', filename='js/admin/edit-product.js')}}"></script>
+</body>
+</html>

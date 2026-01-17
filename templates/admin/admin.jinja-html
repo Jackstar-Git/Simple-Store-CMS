@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="{{ url_for('internal.uploads', filename='Logo.png') }}" type="image">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/admin/admin.css') }}">
+    <title>Admin Panel - Übersicht</title>
+</head>
+<body>
+    <div class="main-container">
+        {% include "admin/sidebar.jinja-html" %}
+        <div class="main-content">
+            <!-- Page Heading -->
+            <h2>Übersicht der aktuellen System- und Produktinformationen</h2>
+            <div class="quicklinks-container">
+                <a href="/" target="_blank" rel="noopener noreferrer" class="quicklink-card">
+                    <i class="fa-solid fa-house"></i>
+                    <h3>Homepage</h3>
+                    <p>Zurück zur Hauptseite des Dashboards.</p>
+                </a>
+
+                <a href="/admin/einstellungen/allgemein" class="quicklink-card">
+                    <i class="fa-solid fa-gear"></i>
+                    <h3>Einstellungen</h3>
+                    <p>System- und Konfigurationseinstellungen verwalten.</p>
+                </a>
+
+                <a href="/admin/einstellungen/logs" class="quicklink-card">
+                    <i class="fa-solid fa-triangle-exclamation"></i>
+                    <h3>Logs</h3>
+                    <p>Lass dir die Logs, Fehlermeldungen und Serverevents anzeigen.</p>
+                </a>
+            </div>
+            <div class="status">
+                <div>
+                    <h4>CPU Nutzung</h4>
+                    <progress id="cpuProgress" class="low" value="0" max="100"></progress>
+                    <span id="cpuUsageText">Laden...</span>
+                </div>
+
+                <div>
+                    <h4>RAM Nutzung</h4>
+                    <progress id="ramProgress" class="medium" value="0" max="100"></progress>
+                    <span id="ramUsageText">Laden...</span>
+                    <p id="ramAdditionalInfo"></p>
+                </div>
+
+                <div>
+                    <h4>Speicherplatz</h4>
+                    <progress id="storageProgress" class="high" value="0" max="100"></progress>
+                    <span id="storageUsageText">Laden...</span>
+                    <p id="storageAdditionalInfo"></p>
+                </div>
+            </div>
+
+            <button id="refreshBtn" onclick="fetchSystemUsage()"><i class="fa-solid fa-rotate-right"></i> Aktualisieren</button>
+
+            <div class="calendar-container">
+                <h2>Kalender</h2>
+                <table class="calendar">
+                    <thead>
+                        <tr>
+                            <th colspan="1">
+                                <button type="button" onclick="changeMonth(-1)"><i class="fa-solid fa-arrow-left"></i></button>
+                            </th>
+                            <th colspan="5" id="calendarMonthYear" class="month-year">
+                                 {{year}} - {{month}}
+                            </th>
+                            <th colspan="1">
+                                <button type="button" onclick="changeMonth(1)"><i class="fa-solid fa-arrow-right"></i></button>
+                            </th>
+                        </tr>
+                        <tr>
+                            <th>Mo</th>
+                            <th>Di</th>
+                            <th>Mi</th>
+                            <th>Do</th>
+                            <th>Fr</th>
+                            <th>Sa</th>
+                            <th>So</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% set day_date = today.replace(month=month, year=year) %}
+                    {% for week in calendar %}
+                        <tr>
+                        {% for day in week %}
+                            {% if day %}
+                                {% set day_date = day_date.replace(day=day) %}
+                                <td 
+                                    {% if day_date < today %}class="past-day"{% endif %}
+                                    {% if day_date == today %}id="today"{% endif %}
+                                    onclick="openModal({{ day }}, {{ month }}, {{ year }})">
+                                    {{ day }}
+                                    <div class="event-count">
+                                        {% set event_count = events | selectattr('year', 'equalto', year) 
+                                                                    | selectattr('month', 'equalto', month) 
+                                                                    | selectattr('day', 'equalto', day) | list | length %}
+                                        {% if event_count > 0 %}
+                                            <span class="event-count-badge">Events: {{ event_count }}</span>
+                                        {% else %}
+                                            <span class="event-count-badge"> </span>
+                                        {% endif %}
+                                    </div>
+                                </td>
+                            {% else %}
+                                <td class="past-day"></td>
+                            {% endif %}
+                        {% endfor %}
+                        </tr>
+                    {% endfor %}
+                </tbody>
+                </table>
+            </div>
+
+            <div class="modal-overlay" id="modalOverlay" onclick="closeModal()"></div>
+            <div class="modal" id="modal">
+                <h3 id="modalHeader">Tag-Details</h3>
+                <p id="modalContent"></p>
+
+                <button id="addEventBtn" onclick="toggleAddEventForm()">+ Ereignis hinzufügen</button>
+
+                <form id="addEventForm" style="display: none;" onsubmit="submitEvent(event)">
+                    <input type="hidden" id="csrf_token" name="csrf_token" value="{{ generate_token() }}">
+                    <input type="text" id="eventName" placeholder="Ereignisname" required>
+                    <textarea id="eventDescription" placeholder="Ereignisbeschreibung" required></textarea>
+                    <button type="submit">Hinzufügen</button>
+                    <button type="button" onclick="toggleAddEventForm()">Abbrechen</button>
+                </form>
+
+                <button onclick="closeModal()">Schließen</button>
+            </div>
+
+        </div>
+
+        <script src="{{ url_for('static', filename='js/admin/admin.js') }}"></script>
+        <script src="{{ url_for('static', filename='js/admin/calendar.js') }}"></script>
+    </div>
+</body>
+</html>

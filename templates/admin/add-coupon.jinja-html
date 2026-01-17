@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="{{ url_for('internal.uploads', filename='Logo.png') }}" type="image">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/admin/edit-coupon.css') }}">
+    <title>Admin Panel - Coupon erstellen</title>
+</head>
+<body>
+    <div class="main-container">
+        {% include "admin/sidebar.jinja-html" %}
+
+        <div class="main-content">
+            <h2>Coupon erstellen</h2>
+
+            <form method="POST" enctype="multipart/form-data" class="edit-coupon-form">
+                <input type="hidden" id="csrf_token" name="csrf_token" value="{{ generate_token() }}">
+
+                <!-- ID Field -->
+                <div class="form-group">
+                    <label for="id">Coupon-ID: (kann später nicht geändert werden)</label>
+                    <input type="text" id="id" name="id" required>
+                    <button onclick="generateCode()" id="code-gen-btn" class="btn" formnovalidate type="button"><i class="fa-solid fa-rotate"></i> Code generieren</button>
+                </div>
+
+                <!-- Type Selection -->
+                <div class="form-group radio-group">
+                    <label>Typ:</label>
+                    <label>
+                        <input type="radio" name="type" value="percentage" required>
+                        Prozentual (%)
+                    </label>
+                    <label>
+                        <input type="radio" name="type" value="absolute" required>
+                        Absolut (€)
+                    </label>
+                </div>
+
+                <!-- Value Field -->
+                <div class="form-group">
+                    <label for="value">Wert:</label>
+                    <input type="number" step="0.01" id="value" name="value" required>
+                </div>
+
+                <!-- Uses Remaining Field -->
+                <div class="form-group">
+                    <label for="uses_remaining">Anzahl der Verwendungen:</label>
+                    <input type="number" id="uses_remaining" name="uses_remaining" min="1">
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="unlimited_uses" onclick="toggleUsesField()">
+                        <label for="unlimited_uses">Unbegrenzt</label>
+                    </div>
+                </div>
+
+                <!-- Valid Till Field -->
+                <div class="form-group">
+                    <label for="valid_till">Gültig bis:</label>
+                    <input type="date" id="valid_till" name="valid_till">
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="unlimited_validity">
+                        <label for="unlimited_validity">Unbegrenzt gültig</label>
+                    </div>
+                </div>
+
+                <!-- Form Actions -->
+                <div class="form-actions">
+                    <button type="submit" class="btn submit-btn">Speichern</button>
+                    <a href="/admin/coupons/alle" class="btn cancel-btn" onclick="return confirm('Bist du sicher, dass du abbrechen willst? Alle Änderungen gehen dabei verloren!')">Abbrechen</a>
+                </div>
+            </form>
+
+        </div>
+    </div>
+    <script src="{{ url_for('static', filename='js/admin/edit-coupon.js')}}"></script>
+</body>
+</html>

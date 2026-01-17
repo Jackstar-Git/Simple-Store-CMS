@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zugriff verweigert - Birdie Club GmbH</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/root.css') }}">
+    <link rel="shortcut icon" href="{{ url_for('internal.uploads', filename='Logo.png') }}" type="image">
+    <style>
+        .container {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 70vh;
+            text-align: center;
+            background-color: #f8f9fa;
+        }
+        .container h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: #333;
+        }
+        .container p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            color: #666;
+        }
+        .container a {
+            display: inline-block;
+            padding: 0.8rem 1.5rem;
+            background-color: var(--main-color);
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+        .container a:hover {
+            background-color: var(--secondary-color);
+        }
+    </style>
+</head>
+<body>
+    {% include "snippets/navbar.jinja-html" %}
+    <div class="container">
+        <h1>Fehler 403</h1>
+        <p>Sie haben keine Berechtigung, diese Seite zu sehen.</p>
+        <p>Bitte überprüfen Sie, ob Sie die richtige URL eingegeben haben.</p>
+        <p>Wenn Sie glauben, dass dies ein Fehler ist, kontaktieren Sie bitte den Administrator.</p>
+        <a href="/">Zurück zur Startseite</a>
+    </div>
+    {% include "snippets/footer.jinja-html" %}
+</body>
+</html>

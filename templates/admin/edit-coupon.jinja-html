@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="{{ url_for('internal.uploads', filename='Logo.png') }}" type="image">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/admin/edit-coupon.css') }}">
+    <title>Admin Panel - Coupon bearbeiten</title>
+</head>
+<body>
+    <div class="main-container">
+        {% include "admin/sidebar.jinja-html" %}
+
+        <div class="main-content">
+            <h2>Coupon bearbeiten</h2>
+
+            <form action="/admin/coupon/{{ coupon.id }}" method="POST" enctype="multipart/form-data" class="edit-coupon-form">
+                <input type="hidden" id="csrf_token" name="csrf_token" value="{{ generate_token() }}">
+
+                <!-- ID Field -->
+                <div class="form-group">
+                    <label for="id">Coupon-ID:</label>
+                    <input type="text" id="id" name="id" value="{{ coupon.id }}" disabled>
+                </div>
+
+                <!-- Type Selection -->
+                <div class="form-group radio-group">
+                    <label>Typ:</label>
+                    <label>
+                        <input type="radio" name="type" value="percentage" 
+                               {% if coupon.type == 'percentage' %}checked{% endif %}>
+                        Prozentual (%)
+                    </label>
+                    <label>
+                        <input type="radio" name="type" value="absolute" 
+                               {% if coupon.type == 'absolute' %}checked{% endif %}>
+                        Absolut (€)
+                    </label>
+                </div>
+
+                <!-- Value Field -->
+                <div class="form-group">
+                    <label for="value">Wert:</label>
+                    <input type="number" step="0.01" id="value" name="value" value="{{ coupon.value }}" required>
+                </div>
+
+                <!-- Uses Remaining Field -->
+                <div class="form-group">
+                    <label for="uses_remaining">Anzahl der Verwendungen:</label>
+                    <input type="number" id="uses_remaining" name="uses_remaining" min="1"
+                           value="{{ coupon.uses_remaining or '' }}" 
+                           {% if coupon.uses_remaining is none %}disabled{% endif %}>
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="unlimited_uses" 
+                               {% if coupon.uses_remaining is none %}checked{% endif %} 
+                               onclick="toggleUsesField()">
+                        <label for="unlimited_uses">Unbegrenzt</label>
+                    </div>
+                </div>
+
+                <!-- Valid Till Field -->
+                <div class="form-group">
+                    <label for="valid_till">Gültig bis:</label>
+                    <input type="date" id="valid_till" name="valid_till" 
+                           value="{{ coupon.valid_till or '' }}" 
+                           {% if coupon.valid_till is none %}disabled{% endif %}>
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="unlimited_validity" 
+                               {% if coupon.valid_till is none %}checked{% endif %} 
+                               onclick="toggleValidityField()">
+                        <label for="unlimited_validity">Unbegrenzt gültig</label>
+                    </div>
+                </div>
+
+                <!-- Form Actions -->
+                <div class="form-actions">
+                    <button type="submit" class="btn submit-btn">Speichern</button>
+                    <a href="/admin/coupons/alle" class="btn cancel-btn" onclick="return confirm('Bist du sicher, dass du abbrechen willst? Alle Änderungen gehen dabei verloren!')">Abbrechen</a>
+                </div>
+            </form>
+
+        </div>
+    </div>
+    <script src="{{ url_for('static', filename='js/admin/edit-coupon.js')}}"></script>
+</body>
+</html>

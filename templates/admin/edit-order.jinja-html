@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit Order</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/admin/edit-order.css') }}">
+</head>
+<body>
+    <div class="main-container">
+        {% include "admin/sidebar.jinja-html" %}
+
+        <div class="main-content">
+            <h2>Bestellung bearbeiten</h2>
+
+            <form method="post" class="edit-order-form">
+                <input type="hidden" id="csrf_token" name="csrf_token" value="{{ generate_token() }}">
+
+                <!-- Order Information -->
+                <div class="order-info">
+                    <div class="form-group">
+                        <label for="email" class="info-label">Email:</label>
+                        <p id="email" class="info">{{ order.email }}</p>
+                    </div>
+                    <div class="form-group">
+                        <label for="name" class="info-label">Name:</label>
+                        <p id="name" class="info">{{ order.name }}</p>
+                    </div>
+                    <div class="form-group">
+                        <label for="address" class="info-label">Adresse:</label>
+                        <p id="address" class="info">{{ order.address }}</p>
+                    </div>
+                    <div class="form-group">
+                        <label for="date" class="info-label">Datum:</label>
+                        <p id="date" class="info">{{ order.date }}</p>
+                    </div>
+                    <div class="form-group">
+                        <label for="total_price" class="info-label">Gesamtpreis:</label>
+                        <p id="total_price" class="info">{{ order.total_price }}</p>
+                    </div>
+                    <div class="form-group">
+                        <label for="discount" class="info-label">Rabatt:</label>
+                        <p id="discount" class="info">{{ order.discount }}</p>
+                    </div>
+                    <div class="form-group">
+                        <label for="items" class="info-label">Artikel:</label>
+                        <table id="items" class="info">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Menge</th>
+                                    <th>Preis/Stk.</th>
+                                    <th>Gesamt</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for item in order.get("items") %}
+                                    <tr>
+                                        <td>{{ item.name }}</td>
+                                        <td>{{ item.quantity }}</td>
+                                        <td>{{ item.unit_price }}</td>
+                                        <td>{{ item.total }}</td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Editable Fields -->
+                <div class="form-group">
+                    <label for="status">Status:</label>
+                    <select name="status" id="status">
+                        <option value="offen" {% if order.status == 'offen' %}selected{% endif %}>Offen</option>
+                        <option value="in bearbeitung" {% if order.status == 'in bearbeitung' %}selected{% endif %}>In Bearbeitung</option>
+                        <option value="geschlossen" {% if order.status == 'geschlossen' %}selected{% endif %}>Geschlossen</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="notiz">Notiz:</label>
+                    <textarea name="notiz" id="notiz">{{ order.notiz }}</textarea>
+                </div>
+
+                <div class="form-actions">
+                    <div class="left-actions">
+                        <button type="submit" class="btn submit-btn"><i class="fas fa-save"></i> Speichern</button>
+                        <a href="mailto:{{ order.email }}?subject=Antwort auf Ihre Bestellung: {{ order.product }}" class="btn antworten-btn"><i class="fas fa-reply"></i> Antworten</a>
+                        <a href="{{ url_for('internal.create_invoice', order_id=order.id) }}" class="btn invoice-btn colorful-btn"><i class="fas fa-file-invoice"></i> Rechnung erstellen</a>
+                    </div>
+                    <a href="/admin/anfragen/bestellungen" class="btn cancel-btn" onclick="return confirm('Bist du sicher, dass du abbrechen willst? Alle Änderungen gehen dabei verloren!')">Abbrechen</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

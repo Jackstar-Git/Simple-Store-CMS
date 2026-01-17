@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="{{ url_for('internal.uploads', filename='Logo.png') }}" type="image">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/admin/all-products.css') }}">
+    <title>Admin Panel - Produkte</title>
+</head>
+<body>
+    <div class="main-container">
+        {% include "admin/sidebar.jinja-html" %}
+
+        <div class="main-content">
+            <h2>Übersicht Produkte</h2>
+            <div class="product-filters">
+                <form class="search-bar" onsubmit="searchProducts(); return false;">
+                    <input type="text" id="search-input" placeholder="Suche nach Produkten...">
+                </form>
+                <div class="sort-options">
+                    <select id="sort-options" onchange="sortProducts()">
+                        <option value="default">Sortieren nach</option>
+                        <option value="price-asc">Preis: Niedrig zu Hoch</option>
+                        <option value="price-desc">Preis: Hoch zu Niedrig</option>
+                        <option value="name-asc">Name: A-Z</option>
+                        <option value="name-desc">Name: Z-A</option>
+                    </select>
+                </div>
+
+                <div class="filter-menu">
+                    <select id="category-filter" onchange="filterProducts()">
+                        <option value="all">Alle Kategorien</option>
+                        {% for category in get_settings("categories") %}
+                            <option  {% if query_params.get('category') ==  category  %}selected{% endif %} value="{{ category }}">{{ category }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+            <div class="products-list">
+                {% set products = query_products(query_params.get("search"), query_params.get("category")) %}
+                {% if products|length == 0 %}
+                    <h3>Keine passenden Produkte gefunden!</h3>
+                    <a href="?">Alle Produkte anzeigen</a>
+                {% endif %}
+                {% for product in products %}
+                    <div class="product-item">
+                        <div class="id-column">{{ product.id }}</div>
+                        <img src="{{ url_for('internal.uploads', filename=product.thumbnail) }}" alt="{{ product.name }}" class="product-thumbnail">
+
+                        <div class="product-info">
+                            <h3><a href="/admin/produkt/{{product.id}}">{{ product.name }}</a></h3>
+                            <p>{{ product.categories | join(', ') }}</p>
+                        </div>
+
+                        <div class="product-price">
+                            € {{ product.price|custom_format }}
+                            {% if product.new_price %}
+                                <br>    
+                                <span>€ {{ product.new_price|custom_format }}</span>
+                            {% endif %}
+                        </div>
+
+                        <div class="product-actions">
+                            <!-- View Button -->
+                            <a href="/produkt/{{product.id}}" target="_blank" rel="noopener noreferrer" class="btn view-btn"><i class="fas fa-eye"></i></a>
+
+                            <!-- Edit Button -->
+                            <a href="/admin/produkt/{{product.id}}" class="btn edit-btn"><i class="fas fa-edit"></i></a>
+
+                            <!-- Delete Button -->
+                            <a href="/api/delete-product?id={{product.id}}" class="btn delete-btn" onclick="return confirm('Bist du sicher, dass du dieses Produkt löschen möchtest?')"><i class="fas fa-trash-alt"></i></a>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+
+        </div>
+    </div>
+    <script src="{{ url_for('static', filename='js/products.js') }}"></script>
+</body>
+</html>
